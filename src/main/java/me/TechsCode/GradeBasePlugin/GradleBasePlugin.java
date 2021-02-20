@@ -118,7 +118,7 @@ public class GradleBasePlugin implements Plugin<Project> {
     }
 
     public static void log(String message){
-        System.out.println(Color.RESET + message);
+        System.out.println(Color.RESET + message + Color.RESET);
     }
 
     public static void log(){
