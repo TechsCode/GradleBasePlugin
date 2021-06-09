@@ -9,6 +9,7 @@ import org.gradle.api.tasks.TaskAction;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 public class GenerateMetaFilesTask extends DefaultTask {
 
@@ -24,14 +25,14 @@ public class GenerateMetaFilesTask extends DefaultTask {
             MetaExtension meta = getProject().getExtensions().getByType(MetaExtension.class);
             int buildNumber = getBuildNumber();
 
-            createPluginYml(resourcesFolder, getProject().getName(), meta.version, buildNumber, meta.loadAfter, meta.loadBefore, meta.load);
-            createBungeeYml(resourcesFolder, getProject().getName(), meta.version, buildNumber);
+            createPluginYml(resourcesFolder, getProject().getName(), meta.version, buildNumber, meta.loadAfter, meta.loadBefore, meta.load, meta.libraries);
+            createBungeeYml(resourcesFolder, getProject().getName(), meta.version, buildNumber, meta.libraries);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void createPluginYml(File resourcesFolder, String projectName, String projectVersion, int buildNumber, String loadAfter, String loadBefore, String load) throws IOException {
+    private void createPluginYml(File resourcesFolder, String projectName, String projectVersion, int buildNumber, String loadAfter, String loadBefore, String load, ArrayList<String> libraries) throws IOException {
         File file = new File(resourcesFolder.getAbsolutePath() + "/plugin.yml");
         file.createNewFile();
 
@@ -47,11 +48,16 @@ public class GenerateMetaFilesTask extends DefaultTask {
         if (loadAfter != null) writer.println("softdepend: " + loadAfter);
         if (loadBefore != null) writer.println("loadbefore: " + loadBefore);
         if (load != null) writer.println("load: " + load);
-
+        if(libraries != null) {
+            writer.println("libraries:");
+            for(String library : libraries) {
+                writer.println("- " + library);
+            }
+        }
         writer.close();
     }
 
-    private void createBungeeYml(File resourcesFolder, String projectName, String projectVersion, int buildNumber) throws IOException {
+    private void createBungeeYml(File resourcesFolder, String projectName, String projectVersion, int buildNumber, ArrayList<String> libraries) throws IOException {
         File file = new File(resourcesFolder.getAbsolutePath() + "/bungee.yml");
         file.createNewFile();
 
@@ -61,6 +67,12 @@ public class GenerateMetaFilesTask extends DefaultTask {
         writer.println("build: " + buildNumber);
         writer.println("main: me.TechsCode." + getProject().getName() + ".base.loader.BungeeLoader");
         writer.println("author: Tech");
+        if(libraries != null) {
+            writer.println("libraries:");
+            for(String library : libraries) {
+                writer.println("- " + library);
+            }
+        }
         writer.close();
     }
 

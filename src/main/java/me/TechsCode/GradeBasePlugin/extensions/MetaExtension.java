@@ -3,6 +3,7 @@ package me.TechsCode.GradeBasePlugin.extensions;
 import me.TechsCode.GradeBasePlugin.Color;
 import me.TechsCode.GradeBasePlugin.GradleBasePlugin;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class MetaExtension {
@@ -10,6 +11,7 @@ public class MetaExtension {
     public String version;
     public String baseVersion;
     public String loadAfter, loadBefore, load;
+    public ArrayList<String> libraries;
 
     public boolean validate() {
         if (version == null) {
