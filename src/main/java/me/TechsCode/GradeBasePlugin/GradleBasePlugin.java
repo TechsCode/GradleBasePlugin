@@ -72,7 +72,7 @@ public class GradleBasePlugin implements Plugin<Project> {
 
         log(Color.BLUE_BOLD_BRIGHT + "Configuring Gradle Project - Build Settings...");
         log();
-        log("Project Info:");
+        log("Project Info");
         log("Plugin: " + project.getName() + " on Version: " + meta.version);
         log();
 
@@ -83,10 +83,11 @@ public class GradleBasePlugin implements Plugin<Project> {
                 log("Successfully retrieved BasePlugin.jar from Github...");
                 project.getDependencies().add("implementation", project.files("libs/BasePlugin.jar"));
             } else if (response == ResourceResponse.FAIL) {
-                log(Color.RED + "Could not retrieve BasePlugin.jar from Github... Using an older build if available.");
+                log(Color.RED + "Could not retrieve BasePlugin.jar from Github...");
                 log(Color.RED_BRIGHT + "Make sure that you have set the GITHUB_TOKEN environment variable that has access to the BasePlugin repository!");
             } else if (response == ResourceResponse.NOT_FETCH) {
                 log(Color.YELLOW + "Not fetching the build, if this is a mistake, please set fetch to true!");
+                project.getDependencies().add("implementation", project.files("libs/BasePlugin.jar"));
             }
         }
 
