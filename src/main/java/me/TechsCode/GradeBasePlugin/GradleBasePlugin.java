@@ -4,6 +4,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar;
 import me.TechsCode.GradeBasePlugin.deploy.DeploymentFile;
 import me.TechsCode.GradeBasePlugin.extensions.MetaExtension;
 import me.TechsCode.GradeBasePlugin.resource.ResourceManager;
+import me.TechsCode.GradeBasePlugin.resource.ResourceResponse;
 import me.TechsCode.GradeBasePlugin.tasks.GenerateMetaFilesTask;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -76,12 +77,16 @@ public class GradleBasePlugin implements Plugin<Project> {
         log();
 
         if (!meta.baseVersion.equalsIgnoreCase("none")) {
-            if (ResourceManager.loadBasePlugin(project, githubToken, meta.baseVersion)) {
+            ResourceResponse response = ResourceManager.loadBasePlugin(project, meta, githubToken, meta.baseVersion);
+
+            if(response == ResourceResponse.SUCCESS) {
                 log("Successfully retrieved BasePlugin.jar from Github...");
                 project.getDependencies().add("implementation", project.files("libs/BasePlugin.jar"));
-            } else {
-                log(Color.RED + "Could not retrieve BasePlugin.jar from Github... Using older build if available");
-                log(Color.RED + "Make sure that you have set the GITHUB_TOKEN environment variable that has access to the BasePlugin repository");
+            } else if (response == ResourceResponse.FAIL) {
+                log(Color.RED + "Could not retrieve BasePlugin.jar from Github... Using an older build if available.");
+                log(Color.RED_BRIGHT + "Make sure that you have set the GITHUB_TOKEN environment variable that has access to the BasePlugin repository!");
+            } else if (response == ResourceResponse.NOT_FETCH) {
+                log(Color.YELLOW + "Not fetching the build, if this is a mistake, please set fetch to true!");
             }
         }
 

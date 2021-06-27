@@ -15,7 +15,7 @@ public class GenerateMetaFilesTask extends DefaultTask {
 
     @TaskAction
     public void generateMetaFiles() {
-        GradleBasePlugin.log(Color.BLUE_BRIGHT + "Generating Plugin.yml & Bungee.yml");
+        GradleBasePlugin.log(Color.BLUE_BRIGHT + "Generating Plugin.yml & Bungee.yml......");
 
         File build = getProject().getBuildDir();
         File resourcesFolder = new File(build.getAbsolutePath() + "/resources/main");
@@ -48,12 +48,12 @@ public class GenerateMetaFilesTask extends DefaultTask {
         if (loadAfter != null) writer.println("softdepend: " + loadAfter);
         if (loadBefore != null) writer.println("loadbefore: " + loadBefore);
         if (load != null) writer.println("load: " + load);
+
         if(libraries != null) {
             writer.println("libraries:");
-            for(String library : libraries) {
-                writer.println("- " + library);
-            }
+            libraries.stream().map(library -> "- " + library).forEach(writer::println);
         }
+
         writer.close();
     }
 
@@ -70,9 +70,7 @@ public class GenerateMetaFilesTask extends DefaultTask {
 
         if(libraries != null) {
             writer.println("libraries:");
-            for(String library : libraries) {
-                writer.println("- " + library);
-            }
+            libraries.stream().map(library -> "- " + library).forEach(writer::println);
         }
 
         writer.close();

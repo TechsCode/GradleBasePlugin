@@ -1,5 +1,6 @@
 package me.TechsCode.GradeBasePlugin.resource;
 
+import me.TechsCode.GradeBasePlugin.extensions.MetaExtension;
 import org.apache.commons.io.IOUtils;
 import org.gradle.api.Project;
 import org.json.simple.JSONArray;
@@ -25,9 +26,11 @@ import java.nio.file.StandardCopyOption;
 
 public class ResourceManager {
 
-    public static boolean loadBasePlugin(Project project, String githubToken, String version) {
+    public static ResourceResponse loadBasePlugin(Project project, MetaExtension meta, String githubToken, String version) {
+        if (!meta.fetch)
+            return ResourceResponse.NOT_FETCH;
         if (githubToken == null)
-            return false;
+            return ResourceResponse.FAIL;
 
         File libraryFolder = new File(project.getProjectDir().getAbsolutePath() + "/libs");
         libraryFolder.mkdirs();
@@ -58,10 +61,10 @@ public class ResourceManager {
             fChannel.close();
         } catch (IOException | URISyntaxException | ParseException e) {
             e.printStackTrace();
-            return false;
+            return ResourceResponse.FAIL;
         }
 
-        return true;
+        return ResourceResponse.SUCCESS;
     }
 
     public static void createGitIgnore(Project project) throws IOException {

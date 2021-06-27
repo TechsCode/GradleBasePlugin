@@ -4,7 +4,6 @@ import me.TechsCode.GradeBasePlugin.Color;
 import me.TechsCode.GradeBasePlugin.GradleBasePlugin;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class MetaExtension {
 
