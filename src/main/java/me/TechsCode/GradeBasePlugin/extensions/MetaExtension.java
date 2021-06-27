@@ -12,6 +12,7 @@ public class MetaExtension {
     public String baseVersion;
     public String loadAfter, loadBefore, load;
     public ArrayList<String> libraries;
+    public boolean fetch;
 
     public boolean validate() {
         if (version == null) {

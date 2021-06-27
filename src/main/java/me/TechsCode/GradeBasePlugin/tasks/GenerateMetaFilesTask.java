@@ -3,12 +3,12 @@ package me.TechsCode.GradeBasePlugin.tasks;
 import me.TechsCode.GradeBasePlugin.Color;
 import me.TechsCode.GradeBasePlugin.GradleBasePlugin;
 import me.TechsCode.GradeBasePlugin.extensions.MetaExtension;
-import org.apache.commons.io.FileUtils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class GenerateMetaFilesTask extends DefaultTask {
@@ -67,12 +67,14 @@ public class GenerateMetaFilesTask extends DefaultTask {
         writer.println("build: " + buildNumber);
         writer.println("main: me.TechsCode." + getProject().getName() + ".base.loader.BungeeLoader");
         writer.println("author: Tech");
+
         if(libraries != null) {
             writer.println("libraries:");
             for(String library : libraries) {
                 writer.println("- " + library);
             }
         }
+
         writer.close();
     }
 

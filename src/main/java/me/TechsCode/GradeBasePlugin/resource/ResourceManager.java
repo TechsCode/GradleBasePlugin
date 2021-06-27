@@ -1,4 +1,4 @@
-package me.TechsCode.GradeBasePlugin;
+package me.TechsCode.GradeBasePlugin.resource;
 
 import org.apache.commons.io.IOUtils;
 import org.gradle.api.Project;
@@ -18,6 +18,7 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -25,7 +26,8 @@ import java.nio.file.StandardCopyOption;
 public class ResourceManager {
 
     public static boolean loadBasePlugin(Project project, String githubToken, String version) {
-        if (githubToken == null) return false;
+        if (githubToken == null)
+            return false;
 
         File libraryFolder = new File(project.getProjectDir().getAbsolutePath() + "/libs");
         libraryFolder.mkdirs();
@@ -37,7 +39,7 @@ public class ResourceManager {
 
         try {
             JSONParser parser = new JSONParser();
-            String json = IOUtils.toString(new URI(RETRIEVE_RELEASES), "UTF-8");
+            String json = IOUtils.toString(new URI(RETRIEVE_RELEASES), StandardCharsets.UTF_8);
             JSONObject root = (JSONObject) parser.parse(json);
             JSONArray assets = (JSONArray) root.get("assets");
             JSONObject asset = (JSONObject) assets.get(0);

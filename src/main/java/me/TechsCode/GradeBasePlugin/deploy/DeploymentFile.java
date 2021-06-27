@@ -1,9 +1,11 @@
-package me.TechsCode.GradeBasePlugin;
+package me.TechsCode.GradeBasePlugin.deploy;
 
 import com.jcraft.jsch.*;
+import me.TechsCode.GradeBasePlugin.Color;
+import me.TechsCode.GradeBasePlugin.GradleBasePlugin;
+import me.TechsCode.GradeBasePlugin.resource.ResourceManager;
 import org.apache.commons.io.FileUtils;
 import org.gradle.api.Project;
-import org.gradle.internal.impldep.com.google.gson.JsonObject;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -16,8 +18,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.StreamSupport;
 
 public class DeploymentFile {
 
@@ -70,7 +70,7 @@ public class DeploymentFile {
         return remotes;
     }
 
-    public class Remote {
+    public static class Remote {
 
         private final boolean enabled;
         private final String hostname, username, password, path;
