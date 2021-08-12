@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
@@ -38,11 +39,16 @@ public class ResourceManager {
         File libraryFile = new File(libraryFolder.getAbsolutePath() + "/BasePlugin.jar");
         libraryFile.delete();
 
-        String RETRIEVE_RELEASES = "https://api.github.com/repos/techscode/baseplugin/releases/tags/" + version + "?access_token=" + githubToken;
+        String RETRIEVE_RELEASES = "https://api.github.com/repos/techscode/baseplugin/releases/tags/" + version;
 
         try {
             JSONParser parser = new JSONParser();
-            String json = IOUtils.toString(new URI(RETRIEVE_RELEASES), StandardCharsets.UTF_8);
+
+            URL urlRelease = new URL(RETRIEVE_RELEASES);
+            HttpsURLConnection urlConnection = (HttpsURLConnection) urlRelease.openConnection();
+            urlConnection.setRequestProperty("Authorization", "token " + githubToken);
+
+            String json = IOUtils.toString(urlConnection.getInputStream(), StandardCharsets.UTF_8);
             JSONObject root = (JSONObject) parser.parse(json);
             JSONArray assets = (JSONArray) root.get("assets");
             JSONObject asset = (JSONObject) assets.get(0);
@@ -59,8 +65,9 @@ public class ResourceManager {
             uChannel.close();
             foStream.close();
             fChannel.close();
-        } catch (IOException | URISyntaxException | ParseException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
+
             return ResourceResponse.FAIL;
         }
 
