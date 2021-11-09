@@ -104,8 +104,8 @@ public class DeploymentFile {
 
                 session.disconnect();
             } catch (JSchException | SftpException | FileNotFoundException e) {
-                GradleBasePlugin.log(Color.RED_BOLD_BRIGHT + "§7Couldn't upload file to remote '" + hostname + "':");
-                GradleBasePlugin.log(Color.RED_BRIGHT + e.getMessage());
+                GradleBasePlugin.log(Color.RED_BOLD_BRIGHT + "Couldn't upload file to remote '" + hostname + "':");
+                e.printStackTrace();
             }
         }
 
