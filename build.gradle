@@ -5,8 +5,13 @@ plugins {
     id 'groovy'
 }
 
-group = 'me.TechsCode'
-version = '1.0'
+
+def groupId = 'me.TechsCode'
+def artifactId = 'GradleBasePlugin'
+def versionNum = '1.0'
+
+group = groupId
+version = versionNum
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -33,16 +38,20 @@ dependencies {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = 'me.TechsCode'
-            artifactId = 'GradleBasePlugin'
-            version = '1.0'
+            groupId
+            artifactId
+            versionNum
 
             from components.java
         }
     }
     repositories {
         maven {
-            url 'repo'
+            url 'https://repo.techscode.com/repository/GradleBasePlugin/'
+            credentials {
+                username = 'publishing'
+                password = 'mfuU7tpTDXxFf7rzBHjA'
+            }
         }
     }
 }
