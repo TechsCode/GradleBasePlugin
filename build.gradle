@@ -45,8 +45,8 @@ publishing {
         maven {
             url 'https://repo.techscode.com/repository/maven-releases/'
             credentials {
-                username = 'fabian'
-                password = 'aMTJ!J@%tzD7-CcL'
+                username = ''
+                password = ''
             }
         }
     }
