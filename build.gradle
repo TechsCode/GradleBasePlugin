@@ -42,12 +42,6 @@ publishing {
         }
     }
     repositories {
-        maven {
-            url 'https://repo.techscode.com/repository/maven-releases/'
-            credentials {
-                username = System.getenv("TECHSCODE_USERNAME")
-                password = System.getenv("TECHSCODE_PASSWORD")
-            }
-        }
+        maven { url 'https://repo.techscode.com/repository/maven-releases/' }
     }
 }
