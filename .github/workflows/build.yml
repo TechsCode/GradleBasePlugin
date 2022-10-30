@@ -33,7 +33,7 @@ jobs:
         echo "projectName=$(./gradlew properties | grep ^name: | cut -c 7-)" >> $GITHUB_ENV
         echo "projectVersion=$(./gradlew properties | grep ^version: | cut -c 10-)" >> $GITHUB_ENV
     
-    - name: Build with Gradle
+    - name: Publish with Gradle
       run: ./gradlew publish
     
     - name: Create Release
