@@ -31,21 +31,23 @@ dependencies {
     implementation 'com.github.johnrengelman.shadow:com.github.johnrengelman.shadow.gradle.plugin:7.1.2'
 }
 
-shadowJar{
-    archiveFileName = "GradleBasePlugin-${versionNum}.jar"
+shadowJar {
+    archiveFileName.set("${artifactId}-${versionNum}.jar")
 }
 
 publishing {
     publications {
-        maven(MavenPublication) {
-            groupId
-            artifactId
-            versionNum
-
-            from components.java
+        shadow(MavenPublication) { publication ->
+            project.shadow.component(publication)
         }
     }
     repositories {
-        maven { url 'https://repo.techscode.com/repository/maven-releases/' }
+        maven {
+            url 'https://repo.techscode.com/repository/maven-releases/'
+            credentials {
+                username = System.getenv('TECHSCODE_USERNAME')
+                password = System.getenv('TECHSCODE_PASSWORD')
+            }
+        }
     }
 }
