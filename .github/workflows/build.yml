@@ -34,7 +34,7 @@ jobs:
         echo "projectVersion=$(./gradlew properties | grep ^version: | cut -c 10-)" >> $GITHUB_ENV
     
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew publish
     
     - name: Create Release
       id: create_release
@@ -52,15 +52,3 @@ jobs:
         asset_path: build/${{ env.projectName }}-${{ env.projectVersion }}.jar
         asset_name: ${{ env.projectName }}.jar
         asset_content_type: application/java-archive
-
-    - name: Nexus Repo Publish
-      uses: sonatype-nexus-community/nexus-repo-github-action@master
-      with:
-        serverUrl: https://repo.techscode.com
-        username: ${{ env.TECHSCODE_USERNAME }}
-        password: ${{ env.TECHSCODE_PASSWORD }}
-        format: maven2
-        repository: maven-releases
-        coordinates: groupId=${{ env.projectGroupId }} artifactId=${{ env.projectArtifactId }}
-        assets: extension=jar
-        filename: build/${{ env.projectName }}-${{ env.projectVersion }}.jar
