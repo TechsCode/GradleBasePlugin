@@ -7,10 +7,9 @@ on:
     branches: [ master ]
 
 env:
-  path: build/libs/GradleBasePlugin.jar
-  name: GradleBasePlugin.jar
-  build: build-${{ github.run_number }}
-
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  TECHSCODE_USERNAME: ${{ secrets.TECHSCODE_USERNAME }}
+  TECHSCODE_PASSWORD: ${{ secrets.TECHSCODE_PASSWORD }}
 
 jobs:
   build:
@@ -26,6 +25,13 @@ jobs:
     
     - name: Grant Gradlew Execute Permission
       run: chmod +x gradlew
+
+    - name: Retrieve Project Info
+      run: |
+        echo "projectGroupId=$(./gradlew properties | grep ^groupId: | cut -c 7-)" >> $GITHUB_ENV
+        echo "projectArtifactId=$(./gradlew properties | grep ^artifactId: | cut -c 7-)" >> $GITHUB_ENV
+        echo "projectName=$(./gradlew properties | grep ^name: | cut -c 7-)" >> $GITHUB_ENV
+        echo "projectVersion=$(./gradlew properties | grep ^version: | cut -c 10-)" >> $GITHUB_ENV
     
     - name: Build with Gradle
       run: ./gradlew build
@@ -33,19 +39,28 @@ jobs:
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ env.build }}
-        release_name: Release ${{ env.build }}
-    
+        tag_name: build-${{ github.run_number }}
+        release_name: Release ${{ env.projectVersion }} build-${{ github.run_number }}
+        body: ${{ join(github.event.commits.*.message, ' || ') }}
+
     - name: Upload Release Asset
-      id: upload-release-asset 
+      id: upload-release-asset
       uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ env.path }}
-        asset_name: ${{ env.name }}
+        asset_path: build/${{ env.projectName }}-${{ env.projectVersion }}.jar
+        asset_name: ${{ env.projectName }}.jar
         asset_content_type: application/java-archive
+
+    - name: Nexus Repo Publish
+      uses: sonatype-nexus-community/nexus-repo-github-action@master
+      with:
+        serverUrl: https://repo.techscode.com
+        username: ${{ env.TECHSCODE_USERNAME }}
+        password: ${{ env.TECHSCODE_PASSWORD }}
+        format: maven2
+        repository: maven-releases
+        coordinates: groupId=${{ env.projectGroupId }} artifactId=${{ env.projectArtifactId }}
+        assets: extension=jar
+        filename: build/${{ env.projectName }}-${{ env.projectVersion }}.jar
