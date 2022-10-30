@@ -111,7 +111,6 @@ public class GradleBasePlugin implements Plugin<Project> {
         project.setProperty("targetCompatibility", "1.8");
 
         // Setting up repositories
-        project.getRepositories().jcenter();
         project.getRepositories().mavenLocal();
         project.getRepositories().mavenCentral();
         Arrays.stream(repositories).forEach(url -> project.getRepositories().maven((maven) -> maven.setUrl(url)));
