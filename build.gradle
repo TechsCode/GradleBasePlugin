@@ -7,7 +7,7 @@ plugins {
 
 def groupId = 'me.TechsCode'
 def artifactId = 'GradleBasePlugin'
-def versionNum = '2.0.3'
+def versionNum = '2.0.4'
 
 group = groupId
 version = versionNum
@@ -29,16 +29,17 @@ dependencies {
     implementation 'com.jcraft:jsch:0.1.55'
 
     implementation 'com.github.johnrengelman.shadow:com.github.johnrengelman.shadow.gradle.plugin:7.1.2'
-}
-
-shadowJar {
-    archiveFileName.set("${artifactId}-${versionNum}.jar")
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
 }
 
 publishing {
     publications {
-        shadow(MavenPublication) { publication ->
-            project.shadow.component(publication)
+        maven(MavenPublication) {
+            groupId
+            artifactId
+            versionNum
+
+            from components.java
         }
     }
     repositories {
@@ -51,3 +52,5 @@ publishing {
         }
     }
 }
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8

@@ -97,7 +97,7 @@ public class GradleBasePlugin implements Plugin<Project> {
                 log(Color.RED + "Could not retrieve BasePlugin.jar from the techscode repo...");
                 log(Color.RED_BRIGHT + "Make sure that you have set the TECHSCODE_PASSWORD environment variable that has access to the maven-private repository!");
             } else if (response == ResourceResponse.FAIL) {
-                log(Color.RED + "Could not retrieve BasePlugin.jar from Github...");
+                log(Color.RED + "Could not retrieve BasePlugin.jar from the techscode repo...");
                 log(Color.RED_BRIGHT + "There was an error downloading the BasePlugin.jar from the techscode repo...");
             } else if (response == ResourceResponse.NOT_FETCH) {
                 log(Color.YELLOW + "Not fetching the build, if this is a mistake, please set fetch to true!");
