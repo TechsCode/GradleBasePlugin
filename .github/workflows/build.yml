@@ -33,7 +33,7 @@ jobs:
         echo "projectName=$(./gradlew properties | grep ^name: | cut -c 7-)" >> $GITHUB_ENV
         echo "projectVersion=$(./gradlew properties | grep ^version: | cut -c 10-)" >> $GITHUB_ENV
     
-    - name: Build with Gradle
+    - name: Publish with Gradle
       run: ./gradlew publish
     
     - name: Create Release
@@ -49,6 +49,6 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: build/${{ env.projectName }}-${{ env.projectVersion }}.jar
+        asset_path: build/libs/${{ env.projectName }}-${{ env.projectVersion }}.jar
         asset_name: ${{ env.projectName }}.jar
         asset_content_type: application/java-archive
