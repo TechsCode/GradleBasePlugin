@@ -1,24 +1,16 @@
 package me.TechsCode.GradeBasePlugin.resource;
 
-import me.TechsCode.GradeBasePlugin.GradleBasePlugin;
 import me.TechsCode.GradeBasePlugin.extensions.Downloader;
 import me.TechsCode.GradeBasePlugin.extensions.MetaExtension;
 import org.gradle.api.Project;
 
-import javax.net.ssl.HttpsURLConnection;
-import java.awt.*;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.*;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
-import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Base64;
 
 public class ResourceManager {
 
@@ -36,7 +28,12 @@ public class ResourceManager {
         File libraryFile = new File(libraryFolder.getAbsolutePath() + "/BasePlugin.jar");
         libraryFile.delete();
 
-        String RETRIEVE_RELEASES = "https://repo.techscode.com/repository/maven-private/me/TechsCode/BasePlugin/"+version+"/BasePlugin-"+version+"-all.jar?enable-custom-header=true";
+        String RETRIEVE_RELEASES;
+        if(!meta.isAPI){
+            RETRIEVE_RELEASES = "https://repo.techscode.com/repository/maven-private/me/TechsCode/BasePlugin/"+version+"/BasePlugin-"+version+"-all.jar?enable-custom-header=true";
+        }else{
+            RETRIEVE_RELEASES = "https://repo.techscode.com/repository/maven-private/me/TechsCode/BasePluginAPI/"+version+"/BasePluginAPI-"+version+"-all.jar?enable-custom-header=true";
+        }
 
         try{
             Downloader downloader = new Downloader();
