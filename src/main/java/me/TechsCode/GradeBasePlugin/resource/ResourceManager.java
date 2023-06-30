@@ -1,24 +1,17 @@
 package me.TechsCode.GradeBasePlugin.resource;
 
-import me.TechsCode.GradeBasePlugin.GradleBasePlugin;
 import me.TechsCode.GradeBasePlugin.extensions.Downloader;
 import me.TechsCode.GradeBasePlugin.extensions.MetaExtension;
+
 import org.gradle.api.Project;
 
-import javax.net.ssl.HttpsURLConnection;
-import java.awt.*;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.*;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
-import java.nio.channels.ReadableByteChannel;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Base64;
 
 public class ResourceManager {
 
@@ -41,7 +34,7 @@ public class ResourceManager {
         try{
             Downloader downloader = new Downloader();
             downloader.authorize(username, password);
-            File jarFile = downloader.download(new URL(RETRIEVE_RELEASES), libraryFile);
+            downloader.download(new URL(RETRIEVE_RELEASES), libraryFile);
             return ResourceResponse.SUCCESS;
         }catch (Exception e){
             e.printStackTrace();
