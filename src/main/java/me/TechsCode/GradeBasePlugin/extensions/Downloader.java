@@ -1,19 +1,20 @@
 package me.TechsCode.GradeBasePlugin.extensions;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Base64;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.ClassicHttpResponse;
+import org.apache.hc.core5.http.HttpException;
+import org.apache.hc.core5.http.io.HttpClientResponseHandler;
 
 public class Downloader {
 
@@ -33,6 +34,7 @@ public class Downloader {
             if (basicAuth != null) {
                 get.setHeader("Authorization", basicAuth);
             }
+            httpclient.execute(get, new FileDownloadResponseHandler(dstFile));
 
             return httpclient.execute(get, new FileDownloadResponseHandler(dstFile));
         } catch (Exception e) {
@@ -42,7 +44,7 @@ public class Downloader {
         }
     }
 
-    static class FileDownloadResponseHandler implements ResponseHandler<File> {
+    static class FileDownloadResponseHandler implements HttpClientResponseHandler<File> {
 
         private final File target;
 
@@ -51,7 +53,7 @@ public class Downloader {
         }
 
         @Override
-        public File handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
+        public File handleResponse(ClassicHttpResponse response) throws HttpException, IOException {
             InputStream source = response.getEntity().getContent();
             FileUtils.copyInputStreamToFile(source, this.target);
             return this.target;
