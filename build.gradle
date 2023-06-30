@@ -7,7 +7,7 @@ plugins {
 
 def groupId = 'me.TechsCode'
 def artifactId = 'GradleBasePlugin'
-def versionNum = '2.0.5'
+def versionNum = '2.0.6'
 
 group = groupId
 version = versionNum
