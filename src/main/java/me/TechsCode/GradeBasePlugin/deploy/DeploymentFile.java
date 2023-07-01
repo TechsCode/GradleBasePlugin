@@ -59,7 +59,7 @@ public class DeploymentFile {
     }
     
     public String getLocalOutputPath() {
-        return root.getAsJsonObject("local").get("outputPath").getAsString();
+        return root.getAsJsonObject("local").get("path").getAsString();
     }
     
     public List<Remote> getRemotes() {
