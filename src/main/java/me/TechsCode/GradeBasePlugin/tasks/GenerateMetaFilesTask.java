@@ -1,15 +1,16 @@
 package me.TechsCode.GradeBasePlugin.tasks;
 
-import me.TechsCode.GradeBasePlugin.Color;
-import me.TechsCode.GradeBasePlugin.GradleBasePlugin;
-import me.TechsCode.GradeBasePlugin.extensions.MetaExtension;
-import org.gradle.api.DefaultTask;
-import org.gradle.api.tasks.TaskAction;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+
+import org.gradle.api.DefaultTask;
+import org.gradle.api.tasks.TaskAction;
+
+import me.TechsCode.GradeBasePlugin.Color;
+import me.TechsCode.GradeBasePlugin.GradleBasePlugin;
+import me.TechsCode.GradeBasePlugin.extensions.MetaExtension;
 
 public class GenerateMetaFilesTask extends DefaultTask {
 
@@ -17,8 +18,7 @@ public class GenerateMetaFilesTask extends DefaultTask {
     public void generateMetaFiles() {
         GradleBasePlugin.log(Color.BLUE_BRIGHT + "Generating Plugin.yml & Bungee.yml......");
 
-        File build = getProject().getBuildDir();
-        File resourcesFolder = new File(build.getAbsolutePath() + "/resources/main");
+        File resourcesFolder = new File(getProject().getBuildDir().getAbsolutePath() + "/resources/main");
         resourcesFolder.mkdirs();
 
         try {
@@ -33,10 +33,11 @@ public class GenerateMetaFilesTask extends DefaultTask {
     }
 
     private void createPluginYml(File resourcesFolder, String projectName, String projectVersion, int buildNumber, String loadAfter, String loadBefore, String load, ArrayList<String> libraries) throws IOException {
-        File file = new File(resourcesFolder.getAbsolutePath() + "/plugin.yml");
+        File file = new File(resourcesFolder, "plugin.yml");
         file.createNewFile();
 
         PrintWriter writer = new PrintWriter(file, "UTF-8");
+
         writer.println("name: " + projectName);
         writer.println("version: " + projectVersion);
         writer.println("author: Tech");
@@ -45,40 +46,44 @@ public class GenerateMetaFilesTask extends DefaultTask {
         writer.println("main: me.TechsCode." + getProject().getName() + ".base.loader.SpigotLoader");
         writer.println("api-version: 1.13");
 
-        if (loadAfter != null) writer.println("softdepend: " + loadAfter);
-        if (loadBefore != null) writer.println("loadbefore: " + loadBefore);
-        if (load != null) writer.println("load: " + load);
-
-        if(libraries != null) {
+        if (loadAfter != null) {
+            writer.println("softdepend: " + loadAfter);
+        }
+        if (loadBefore != null) {
+            writer.println("loadbefore: " + loadBefore);
+        }
+        if (load != null) {
+            writer.println("load: " + load);
+        }
+        if (libraries != null) {
             writer.println("libraries:");
             libraries.stream().map(library -> "- " + library).forEach(writer::println);
         }
-
         writer.close();
     }
 
     private void createBungeeYml(File resourcesFolder, String projectName, String projectVersion, int buildNumber, ArrayList<String> libraries) throws IOException {
-        File file = new File(resourcesFolder.getAbsolutePath() + "/bungee.yml");
+        File file = new File(resourcesFolder, "bungee.yml");
         file.createNewFile();
-
+        
         PrintWriter writer = new PrintWriter(file, "UTF-8");
+
         writer.println("name: " + projectName);
         writer.println("version: " + projectVersion);
         writer.println("build: " + buildNumber);
         writer.println("main: me.TechsCode." + getProject().getName() + ".base.loader.BungeeLoader");
         writer.println("author: Tech");
-
-        if(libraries != null) {
+        
+        if (libraries != null) {
             writer.println("libraries:");
             libraries.stream().map(library -> "- " + library).forEach(writer::println);
         }
-
         writer.close();
     }
 
     private int getBuildNumber() {
         String buildNumber = System.getenv("BUILD_NUMBER");
-
+        
         return buildNumber != null ? Integer.parseInt(buildNumber) : 0;
     }
 }
