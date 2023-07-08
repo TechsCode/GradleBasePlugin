@@ -24,6 +24,13 @@ jobs:
       - name: Grant Gradlew Permissions
         run: chmod +x gradlew
 
+      - name: Publish with Gradle
+        run: ./gradlew publish
+        env:
+          GITHUB_RUN_NUMBER: ${{ github.run_number }}
+          TECHSCODE_USERNAME: ${{ secrets.TECHSCODE_USERNAME }}
+          TECHSCODE_PASSWORD: ${{ secrets.TECHSCODE_PASSWORD }}
+
       - name: Build with Gradle
         run: ./gradlew shadowjar
         env:
