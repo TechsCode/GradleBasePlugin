@@ -1,9 +1,9 @@
 package me.TechsCode.GradeBasePlugin.extensions;
 
+import java.util.ArrayList;
+
 import me.TechsCode.GradeBasePlugin.Color;
 import me.TechsCode.GradeBasePlugin.GradleBasePlugin;
-
-import java.util.ArrayList;
 
 public class MetaExtension {
 
@@ -21,7 +21,6 @@ public class MetaExtension {
             GradleBasePlugin.log(Color.RED + "Please check the GitHub page of GradleBasePlugin for more information");
             return true;
         }
-
         return false;
     }
 }

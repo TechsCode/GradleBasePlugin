@@ -7,7 +7,7 @@ plugins {
 
 def groupId = 'me.TechsCode'
 def artifactId = 'GradleBasePlugin'
-def versionNum = '2.0.6'
+def versionNum = '2.1.0'
 
 group = groupId
 version = versionNum
@@ -24,12 +24,12 @@ dependencies {
     compileOnly localGroovy()
     compileOnly gradleApi()
 
-    implementation 'commons-io:commons-io:2.11.0'
-    implementation "com.googlecode.json-simple:json-simple:1.1.1"
+    implementation 'commons-io:commons-io:2.13.0'
+    implementation "com.google.code.gson:gson:2.10.1"
     implementation 'com.jcraft:jsch:0.1.55'
 
     implementation 'com.github.johnrengelman.shadow:com.github.johnrengelman.shadow.gradle.plugin:7.1.2'
-    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
 }
 
 publishing {
