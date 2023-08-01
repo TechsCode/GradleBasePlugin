@@ -32,7 +32,6 @@ public class Downloader {
             if (basicAuth != null) {
                 get.setHeader("Authorization", basicAuth);
             }
-
             return httpclient.execute(get, new FileDownloadResponseHandler(dstFile));
         }
         catch (Exception e) {
