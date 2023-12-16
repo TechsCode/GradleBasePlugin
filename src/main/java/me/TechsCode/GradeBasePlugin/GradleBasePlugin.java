@@ -48,6 +48,7 @@ public class GradleBasePlugin implements Plugin<Project> {
         try {
             ResourceManager.createGitIgnore(project);
             ResourceManager.createWorkflow(project, meta.isAPI);
+            ResourceManager.createGradleFiles(project);
         }
         catch (IOException ignored) {}
         

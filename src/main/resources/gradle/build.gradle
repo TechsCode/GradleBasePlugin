@@ -4,6 +4,12 @@ file("plugin.properties").withInputStream {
 }
 
 buildscript {
+    // Load the plugin.properties file
+    def buildProps = new Properties()
+    file("plugin.properties").withInputStream {
+        buildProps.load(it)
+    }
+
     repositories {
         maven {
             url 'https://plugins.gradle.org/m2/'
@@ -14,7 +20,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "me.TechsCode:GradleBasePlugin:2.3.0-test"
+        classpath "me.TechsCode:GradleBasePlugin:${buildProps.gradleBasePluginVersion}"
     }
 }
 

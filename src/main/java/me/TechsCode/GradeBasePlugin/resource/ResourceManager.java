@@ -57,31 +57,34 @@ public class ResourceManager {
     }
     
     public static void createWorkflow(Project project, boolean isApi) throws IOException {
-        File destination;
-
-        if(isApi){
-            destination = new File(project.getProjectDir().getAbsolutePath() + "/.github/workflows/build/api.yml");
-        }else{
-            destination = new File(project.getProjectDir().getAbsolutePath() + "/.github/workflows/build/plugin.yml");
-        }
+        File destination = new File(project.getProjectDir().getAbsolutePath() + "/.github/workflows/build.yml");
         destination.mkdirs();
-        
-        InputStream src = ResourceManager.class.getResourceAsStream("/workflows/build.yml");
+
+        String workflowFile;
+        if(isApi){
+            workflowFile = "/workflows/build/api.yml";
+        }else{
+            workflowFile = "/workflows/build/plugin.yml";
+        }
+
+        InputStream src = ResourceManager.class.getResourceAsStream(workflowFile);
         Files.copy(src, Paths.get(destination.toURI()), StandardCopyOption.REPLACE_EXISTING);
     }
 
     public static void createGradleFiles(Project project) throws IOException {
-        File buildGradleFile = new File(project.getProjectDir().getAbsolutePath() + "/gradle/build.gradle");
-        InputStream buildGradleSrc = ResourceManager.class.getResourceAsStream("/build.gradle");
-        Files.copy(buildGradleSrc, Paths.get(buildGradleFile.toURI()), StandardCopyOption.REPLACE_EXISTING);
+        // build.gradle
+        File buildGradleDestination = new File(project.getProjectDir().getAbsolutePath() + "/build.gradle");
+        buildGradleDestination.mkdirs();
 
-        File settingsGradleFile = new File(project.getProjectDir().getAbsolutePath() + "/gradle/plugin.properties");
-        InputStream settingsGradleSrc = ResourceManager.class.getResourceAsStream("/plugin-test.properties");
+        InputStream buildGradleSrc = ResourceManager.class.getResourceAsStream("/gradle/build.gradle");
+        Files.copy(buildGradleSrc, Paths.get(buildGradleDestination.toURI()), StandardCopyOption.REPLACE_EXISTING);
 
-        // Don't copy if src file exists
-        if(settingsGradleSrc == null){
-            Files.copy(settingsGradleSrc, Paths.get(settingsGradleFile.toURI()), StandardCopyOption.REPLACE_EXISTING);
-        }
+        // plugin.properties
+        File pluginPropertiesDestination = new File(project.getProjectDir().getAbsolutePath() + "/plugin.properties");
+        pluginPropertiesDestination.mkdirs();
+
+        InputStream pluginPropertiesSrc = ResourceManager.class.getResourceAsStream("/gradle/plugin.properties");
+        Files.copy(pluginPropertiesSrc, Paths.get(pluginPropertiesDestination.toURI()), StandardCopyOption.REPLACE_EXISTING);
     }
 
 }
