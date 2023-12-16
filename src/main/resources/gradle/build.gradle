@@ -38,6 +38,8 @@ meta {
     loadAfter = props.loadAfter
     fetch = props.fetch
     isAPI = props.isAPI
+    repositories = props.repositories
+    dependencies = props.dependencies
 }
 
 compileJava {
