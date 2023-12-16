@@ -1,0 +1,67 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  nmsVersion: "1.12.2"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 8
+
+      - name: Grant Gradlew Permissions
+        run: chmod +x gradlew
+
+      - name: Publish with Gradle
+        run: ./gradlew publish
+        env:
+          GITHUB_RUN_NUMBER: ${{ github.run_number }}
+          TECHSCODE_USERNAME: ${{ secrets.TECHSCODE_USERNAME }}
+          TECHSCODE_PASSWORD: ${{ secrets.TECHSCODE_PASSWORD }}
+
+      - name: Build with Gradle
+        run: ./gradlew shadowjar
+        env:
+          TECHSCODE_USERNAME: ${{ secrets.TECHSCODE_USERNAME }}
+          TECHSCODE_PASSWORD: ${{ secrets.TECHSCODE_PASSWORD }}
+
+      - name: Retrieve Project Name & Version
+        run: |
+          echo "projectName=$(./gradlew properties | grep ^name: | cut -c 7-)" >> $GITHUB_ENV
+          echo "projectVersion=$(./gradlew properties | grep ^version: | cut -c 10-)" >> $GITHUB_ENV
+        env:
+          TECHSCODE_USERNAME: ${{ secrets.TECHSCODE_USERNAME }}
+          TECHSCODE_PASSWORD: ${{ secrets.TECHSCODE_PASSWORD }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: build-${{ github.run_number }}
+          release_name: Release ${{ env.projectVersion }} build-${{ github.run_number }}
+          body: ${{ join(github.event.commits.*.message, ' || ') }}
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build/${{ env.projectName }}.jar
+          asset_name: ${{ env.projectName }}.jar
+          asset_content_type: application/java-archive

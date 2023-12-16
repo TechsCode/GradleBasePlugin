@@ -62,9 +62,9 @@ public class ResourceManager {
 
         String workflowFile;
         if(isApi){
-            workflowFile = "/workflows/build/api.yml";
+            workflowFile = "/workflows/api.yml";
         }else{
-            workflowFile = "/workflows/build/plugin.yml";
+            workflowFile = "/workflows/plugin.yml";
         }
 
         InputStream src = ResourceManager.class.getResourceAsStream(workflowFile);
