@@ -44,9 +44,11 @@ repositories {
     mavenCentral()
 
     props.repositories.each { key, value ->
+        logger.info("Adding repository: ${key} (${value})")
+
         maven {
-            name key
-            url value
+            name "${key}"
+            url "${value}"
         }
     }
 }
@@ -55,12 +57,15 @@ dependencies {
     props.dependencies.each { key, config  ->
         def (scope, dep) = config
 
+        logger.info("Adding dependency: ${dep} (${scope})")
+
+
         if (scope == 'compileOnly') {
-            compileOnly dep
+            compileOnly "${dep}"
         } else if(scope == 'compileOnly files') {
-            compileOnly files(dep)
+            compileOnly files("${dep}")
         } else if(scope == 'implementation') {
-            implementation dep
+            implementation "${dep}"
         } else {
             throw new Exception("Unknown dependency scope: ${scope}")
         }
