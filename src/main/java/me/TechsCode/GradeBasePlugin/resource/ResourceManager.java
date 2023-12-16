@@ -68,6 +68,8 @@ public class ResourceManager {
         }
 
         InputStream src = ResourceManager.class.getResourceAsStream(workflowFile);
+        if(src == null) throw new IOException("Workflow file not found in resources");
+
         Files.copy(src, Paths.get(destination.toURI()), StandardCopyOption.REPLACE_EXISTING);
     }
 
@@ -77,14 +79,9 @@ public class ResourceManager {
         buildGradleDestination.mkdirs();
 
         InputStream buildGradleSrc = ResourceManager.class.getResourceAsStream("/gradle/build.gradle");
+        if(buildGradleSrc == null) throw new IOException("build.gradle file not found in resources");
+
         Files.copy(buildGradleSrc, Paths.get(buildGradleDestination.toURI()), StandardCopyOption.REPLACE_EXISTING);
-
-        // plugin.properties
-        File pluginPropertiesDestination = new File(project.getProjectDir().getAbsolutePath() + "/plugin.properties");
-        pluginPropertiesDestination.mkdirs();
-
-        InputStream pluginPropertiesSrc = ResourceManager.class.getResourceAsStream("/gradle/plugin.properties");
-        Files.copy(pluginPropertiesSrc, Paths.get(pluginPropertiesDestination.toURI()), StandardCopyOption.REPLACE_EXISTING);
     }
 
 }
