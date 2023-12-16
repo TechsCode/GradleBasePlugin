@@ -32,7 +32,7 @@ public class ResourceManager {
         libraryFile.delete();
 
         String RETRIEVE_RELEASES;
-        if(!meta.isAPI){
+        if(!meta.isApi){
             RETRIEVE_RELEASES = "https://repo.techscode.com/repository/maven-private/me/TechsCode/BasePlugin/"+version+"/BasePlugin-"+version+"-all.jar?enable-custom-header=true";
         }else{
             RETRIEVE_RELEASES = "https://repo.techscode.com/repository/maven-private/me/TechsCode/BasePluginAPI/"+version+"/BasePluginAPI-"+version+"-all.jar?enable-custom-header=true";

@@ -6,6 +6,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import org.gradle.api.DefaultTask;
+import org.gradle.api.Project;
+import org.gradle.api.invocation.Gradle;
 import org.gradle.api.tasks.TaskAction;
 
 import me.TechsCode.GradeBasePlugin.Color;
@@ -13,6 +15,12 @@ import me.TechsCode.GradeBasePlugin.GradleBasePlugin;
 import me.TechsCode.GradeBasePlugin.extensions.MetaExtension;
 
 public class GenerateMetaFilesTask extends DefaultTask {
+
+    private Project project;
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
 
     @TaskAction
     public void generateMetaFiles() {
@@ -22,7 +30,15 @@ public class GenerateMetaFilesTask extends DefaultTask {
         resourcesFolder.mkdirs();
 
         try {
-            MetaExtension meta = getProject().getExtensions().getByType(MetaExtension.class);
+            File propertiesFile = new File(project.getProjectDir(), GradleBasePlugin.propertiesFileName);
+            if(!propertiesFile.exists()){
+                GradleBasePlugin.log();
+                GradleBasePlugin.log(Color.RED + "Could not find properties.json file!");
+                GradleBasePlugin.log(Color.RED_BRIGHT + "Make sure that you have a " + Color.BLUE + "properties.json" + Color.RED_BRIGHT + " file in the root directory of your project!");
+                return;
+            }
+
+            MetaExtension meta = MetaExtension.fromFile(propertiesFile);
             int buildNumber = getBuildNumber();
 
             createPluginYml(resourcesFolder, getProject().getName(), meta.version, buildNumber, meta.loadAfter, meta.loadBefore, meta.load, meta.libraries);

@@ -4,22 +4,21 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
+import me.TechsCode.GradeBasePlugin.deploy.Remote;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar;
 
-import me.TechsCode.GradeBasePlugin.deploy.DeploymentFile;
 import me.TechsCode.GradeBasePlugin.extensions.MetaExtension;
 import me.TechsCode.GradeBasePlugin.resource.ResourceManager;
 import me.TechsCode.GradeBasePlugin.resource.ResourceResponse;
 import me.TechsCode.GradeBasePlugin.tasks.GenerateMetaFilesTask;
-import org.gradle.api.artifacts.DependencyResolutionListener;
-import org.gradle.api.artifacts.ResolvableDependencies;
 
 public class GradleBasePlugin implements Plugin<Project> {
-    
+
+
     private static final String[] repositories = new String[] {
             "https://hub.spigotmc.org/nexus/content/repositories/snapshots/",
             "https://oss.sonatype.org/content/repositories/snapshots", "https://jitpack.io",
@@ -33,31 +32,43 @@ public class GradleBasePlugin implements Plugin<Project> {
             "me.TechsCode.base#me.TechsCode.PROJECT_NAME.base",
             "me.TechsCode.tpl#me.TechsCode.PROJECT_NAME.tpl",
             "me.TechsCode.dependencies#me.TechsCode.PROJECT_NAME.dependencies" };
-    
+
+    public static String propertiesFileName = "properties.json";
     private MetaExtension meta;
     private String username;
     private String password;
     
     @Override
     public void apply(Project project) {
-        DeploymentFile deploymentFile = new DeploymentFile(project);
-        
-        this.meta = project.getExtensions().create("meta", MetaExtension.class);
-        
+        File propertiesFile = new File(project.getProjectDir(), propertiesFileName);
+        if(!propertiesFile.exists()){
+            log();
+            log(Color.RED + "Could not find properties.json file!");
+            log(Color.RED_BRIGHT + "Make sure that you have a " + Color.BLUE + "properties.json" + Color.RED_BRIGHT + " file in the root directory of your project!");
+            return;
+        }
+
+        this.meta = MetaExtension.fromFile(propertiesFile);
+
         this.username = System.getenv("TECHSCODE_USERNAME");
         this.password = System.getenv("TECHSCODE_PASSWORD");
         
         // Registering GradleBasePlugin tasks
-        project.getTasks().create("generateMetaFiles", GenerateMetaFilesTask.class);
+        // run GenerateMetaFilesTask and pass in the project
+        project.getTasks().register("generateMetaFiles", GenerateMetaFilesTask.class, (task) -> {
+            task.setProject(project);
+        });
+
+
         
         // Setting up Shadow Plugin
         project.getPlugins().apply("com.github.johnrengelman.shadow");
         getShadowJar(project).getArchiveFileName().set(project.getName() + ".jar");
-        getShadowJar(project).setProperty("destinationDir", project.file(deploymentFile.getLocalOutputPath()));
+        getShadowJar(project).setProperty("destinationDir", project.file(meta.localDeploymentPath));
         getShadowJar(project).dependsOn("generateMetaFiles");
         
         // project.getTasks().getByName("build").dependsOn("shadowJar");
-        project.getTasks().getByName("build").doLast((task) -> uploadToRemotes(task, deploymentFile));
+        project.getTasks().getByName("build").doLast(this::uploadToRemotes);
         
         // Add onProjectEvaluation hook
         project.afterEvaluate(this::onProjectEvaluation);
@@ -76,7 +87,7 @@ public class GradleBasePlugin implements Plugin<Project> {
         log("Generating and copying files...");
         try {
             ResourceManager.createGitIgnore(project);
-            ResourceManager.createWorkflow(project, meta.isAPI);
+            ResourceManager.createWorkflow(project, meta.isApi);
             ResourceManager.createGradleFiles(project);
         }
         catch (IOException e) {
@@ -87,20 +98,26 @@ public class GradleBasePlugin implements Plugin<Project> {
         }
         log();
 
+        log(Color.YELLOW + meta.repositories.toString());
+        log(Color.YELLOW + meta.dependencies.toString());
+
         project.afterEvaluate((p) -> {
             log("Setting up repositories...");
             project.getRepositories().mavenLocal();
             meta.repositories.forEach((name, url) -> project.getRepositories().maven((maven) -> {
                 log(Color.BLUE + "Adding repository: " + name + " with url: " + url + "...");
-                maven.setUrl(url);
                 maven.setName(name);
+                maven.setUrl(url);
             }));
 
             log();
             log("Setting up dependencies...");
             meta.dependencies.forEach((name, confAndUrl) -> {
-                log(Color.BLUE + "Adding dependency: " + name + " with configuration: " + confAndUrl[0] + " and url: " + confAndUrl[1] + "...");
-                project.getDependencies().add(confAndUrl[0], confAndUrl[1]);
+                String scope = confAndUrl[0];
+                String url = confAndUrl[1];
+
+                log(Color.BLUE + "Adding dependency: " + name + " with configuration: " + scope + " and url: " + url + "...");
+                project.getDependencies().add(scope, url);
             });
         });
         log();
@@ -157,11 +174,11 @@ public class GradleBasePlugin implements Plugin<Project> {
     }
     
     /* After the build prcoess is completed, the file will be uploaded to all remotes */
-    private void uploadToRemotes(Task buildTask, DeploymentFile deploymentFile) {
-        File file = new File(deploymentFile.getLocalOutputPath() + '/'
+    private void uploadToRemotes(Task buildTask) {
+        File file = new File(meta.localDeploymentPath + '/'
                 + buildTask.getProject().getName() + ".jar");
-        
-        deploymentFile.getRemotes().stream().filter(DeploymentFile.Remote::isEnabled)
+
+        meta.remotes.stream().filter(Remote::isEnabled)
                 .forEach(all -> all.uploadFile(file));
     }
     

@@ -1,14 +1,15 @@
-def props = new Properties()
-file("plugin.properties").withInputStream {
-    props.load(it)
+import groovy.json.JsonSlurper
+
+if(!project.file("properties.json").exists()){
+    throw new Exception("properties.json doesn't exist! Please create it.")
 }
+def props = new JsonSlurper().parseText(file("properties.json").text)
 
 buildscript {
-    // Load the plugin.properties file
-    def buildProps = new Properties()
-    file("plugin.properties").withInputStream {
-        buildProps.load(it)
+    if(!project.file("properties.json").exists()){
+        throw new Exception("properties.json doesn't exist! Please create it.")
     }
+    def buildProps = new JsonSlurper().parseText(file('properties.json').text)
 
     repositories {
         maven {
@@ -30,18 +31,6 @@ apply plugin: 'me.TechsCode.GradleBasePlugin'
 
 group = 'me.TechsCode'
 
-meta {
-    version = props.version
-    baseVersion = props.baseVersion
-    load = props.load
-    loadBefore = props.loadBefore
-    loadAfter = props.loadAfter
-    fetch = props.fetch
-    isAPI = props.isAPI
-    repositories = props.repositories
-    dependencies = props.dependencies
-}
-
 compileJava {
     options.encoding = "UTF-8"
 }
@@ -59,7 +48,7 @@ publishing {
     }
     repositories {
         maven {
-            url "https://repo.techscode.com/repository/techscode-${props.isAPI ? "apis" : "plugins"}/"
+            url "https://repo.techscode.com/repository/techscode-${props.isApi ? "apis" : "plugins"}/"
             credentials {
                 username = System.getenv('TECHSCODE_USERNAME')
                 password = System.getenv('TECHSCODE_PASSWORD')
