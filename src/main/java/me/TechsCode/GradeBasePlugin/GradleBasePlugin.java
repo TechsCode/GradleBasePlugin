@@ -45,13 +45,6 @@ public class GradleBasePlugin implements Plugin<Project> {
         this.username = System.getenv("TECHSCODE_USERNAME");
         this.password = System.getenv("TECHSCODE_PASSWORD");
         
-        try {
-            ResourceManager.createGitIgnore(project);
-            ResourceManager.createWorkflow(project, meta.isAPI);
-            ResourceManager.createGradleFiles(project);
-        }
-        catch (IOException ignored) {}
-        
         // Registering GradleBasePlugin tasks
         project.getTasks().create("generateMetaFiles", GenerateMetaFilesTask.class);
         
@@ -77,6 +70,14 @@ public class GradleBasePlugin implements Plugin<Project> {
         log("Project Info");
         log("Plugin: " + project.getName() + " on Version: " + meta.version);
         log();
+
+        log("Generating and copying files...");
+        try {
+            ResourceManager.createGitIgnore(project);
+            ResourceManager.createWorkflow(project, meta.isAPI);
+            ResourceManager.createGradleFiles(project);
+        }
+        catch (IOException ignored) {}
         
         if (this.username == null || this.password == null) {
             log(Color.RED + "Missing TECHSCODE_USERNAME and/or TECHSCODE_PASSWORD environment variables!");
