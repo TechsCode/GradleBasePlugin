@@ -1,0 +1,94 @@
+def props = new Properties()
+file("plugin.properties").withInputStream {
+    props.load(it)
+}
+
+buildscript {
+    // Load the plugin.properties file
+    def buildProps = new Properties()
+    file("plugin.properties").withInputStream {
+        buildProps.load(it)
+    }
+
+    repositories {
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+        maven {
+            url "https://repo.techscode.com/repository/maven-releases/"
+        }
+    }
+
+    dependencies {
+        classpath "me.TechsCode:GradleBasePlugin:${buildProps.gradleBasePluginVersion}"
+    }
+}
+
+apply plugin: 'maven-publish'
+apply plugin: 'java'
+apply plugin: 'me.TechsCode.GradleBasePlugin'
+
+group = 'me.TechsCode'
+
+meta {
+    version = props.version
+    baseVersion = props.baseVersion
+    load = props.load
+    loadBefore = props.loadBefore
+    loadAfter = props.loadAfter
+    fetch = props.fetch
+    isAPI = props.isAPI
+}
+
+repositories {
+    mavenCentral()
+
+    props.repositories.each { key, value ->
+        maven {
+            name key
+            url value
+        }
+    }
+}
+
+dependencies {
+    props.dependencies.each { key, config  ->
+        def (scope, dep) = config
+
+        if (scope == 'compileOnly') {
+            compileOnly dep
+        } else if(scope == 'compileOnly files') {
+            compileOnly files(dep)
+        } else if(scope == 'implementation') {
+            implementation dep
+        } else {
+            throw new Exception("Unknown dependency scope: ${scope}")
+        }
+    }
+}
+
+compileJava {
+    options.encoding = "UTF-8"
+}
+
+shadowJar{
+    archiveClassifier.set("")
+}
+
+publishing {
+    publications {
+        shadow(MavenPublication) { publication ->
+            project.shadow.component(publication)
+            version = "${props.version}_build-${System.getenv('GITHUB_RUN_NUMBER') ?: "manual"}"
+        }
+    }
+    repositories {
+        maven {
+            url "https://repo.techscode.com/repository/techscode-${props.isAPI ? "apis" : "plugins"}/"
+            credentials {
+                username = System.getenv('TECHSCODE_USERNAME')
+                password = System.getenv('TECHSCODE_PASSWORD')
+            }
+        }
+    }
+}
