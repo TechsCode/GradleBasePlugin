@@ -65,3 +65,11 @@ jobs:
           asset_path: build/${{ env.projectName }}.jar
           asset_name: ${{ env.projectName }}.jar
           asset_content_type: application/java-archive
+
+      - name: Trigger Update Server
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: 'https://update.techscode.com/api/new-release'
+          method: 'POST'
+          customHeaders: '{"Content-Type": "application/json", "Authorization": "${{ secrets.UPDATE_SERVER_API_KEY }}"}'
+          data: '{"plugin_name": "ultraeconomytest", "release_title": "Release ${{ env.projectVersion }} build-${{ github.run_number }}"}'

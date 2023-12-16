@@ -7,7 +7,12 @@ plugins {
 
 def groupId = 'me.TechsCode'
 def artifactId = 'GradleBasePlugin'
-def versionNum = '2.1.2'
+
+// Versioning:
+//                      /---> Major Version - Increment this when you make a breaking change
+//                      | /---> Patch Version - Increment this when you add a new feature
+//                      | |  /---> Minor Version - Increment this when you make a bug fix
+def versionNum = '2.2.0'
 
 group = groupId
 version = versionNum
