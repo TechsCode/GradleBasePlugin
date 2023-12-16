@@ -3,6 +3,7 @@ package me.TechsCode.GradeBasePlugin;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Objects;
 
 import me.TechsCode.GradeBasePlugin.deploy.Remote;
 import org.gradle.api.Plugin;
@@ -58,8 +59,6 @@ public class GradleBasePlugin implements Plugin<Project> {
         project.getTasks().register("generateMetaFiles", GenerateMetaFilesTask.class, (task) -> {
             task.setProject(project);
         });
-
-
         
         // Setting up Shadow Plugin
         project.getPlugins().apply("com.github.johnrengelman.shadow");
@@ -98,9 +97,6 @@ public class GradleBasePlugin implements Plugin<Project> {
         }
         log();
 
-        log(Color.YELLOW + meta.repositories.toString());
-        log(Color.YELLOW + meta.dependencies.toString());
-
         project.afterEvaluate((p) -> {
             log("Setting up repositories...");
             project.getRepositories().mavenLocal();
@@ -117,7 +113,11 @@ public class GradleBasePlugin implements Plugin<Project> {
                 String url = confAndUrl[1];
 
                 log(Color.BLUE + "Adding dependency: " + name + " with configuration: " + scope + " and url: " + url + "...");
-                project.getDependencies().add(scope, url);
+                if(!url.contains(":")){
+                    project.getDependencies().add(scope, project.files(url));
+                }else{
+                    project.getDependencies().add(scope, url);
+                }
             });
         });
         log();
