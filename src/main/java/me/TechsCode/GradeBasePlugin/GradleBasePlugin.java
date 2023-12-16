@@ -15,6 +15,8 @@ import me.TechsCode.GradeBasePlugin.extensions.MetaExtension;
 import me.TechsCode.GradeBasePlugin.resource.ResourceManager;
 import me.TechsCode.GradeBasePlugin.resource.ResourceResponse;
 import me.TechsCode.GradeBasePlugin.tasks.GenerateMetaFilesTask;
+import org.gradle.api.artifacts.DependencyResolutionListener;
+import org.gradle.api.artifacts.ResolvableDependencies;
 
 public class GradleBasePlugin implements Plugin<Project> {
     
@@ -83,7 +85,26 @@ public class GradleBasePlugin implements Plugin<Project> {
             e.printStackTrace();
             return;
         }
-        
+        log();
+
+        project.afterEvaluate((p) -> {
+            log("Setting up repositories...");
+            project.getRepositories().mavenLocal();
+            meta.repositories.forEach((name, url) -> project.getRepositories().maven((maven) -> {
+                log(Color.BLUE + "Adding repository: " + name + " with url: " + url + "...");
+                maven.setUrl(url);
+                maven.setName(name);
+            }));
+
+            log();
+            log("Setting up dependencies...");
+            meta.dependencies.forEach((name, confAndUrl) -> {
+                log(Color.BLUE + "Adding dependency: " + name + " with configuration: " + confAndUrl[0] + " and url: " + confAndUrl[1] + "...");
+                project.getDependencies().add(confAndUrl[0], confAndUrl[1]);
+            });
+        });
+        log();
+
         if (this.username == null || this.password == null) {
             log(Color.RED + "Missing TECHSCODE_USERNAME and/or TECHSCODE_PASSWORD environment variables!");
             log(Color.RED_BRIGHT + "Make sure that you have set the TECHSCODE_USERNAME and TECHSCODE_PASSWORD environment variables that has access to the maven-private repository!");

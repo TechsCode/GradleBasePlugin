@@ -1,6 +1,7 @@
 package me.TechsCode.GradeBasePlugin.extensions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import me.TechsCode.GradeBasePlugin.Color;
 import me.TechsCode.GradeBasePlugin.GradleBasePlugin;
@@ -13,6 +14,9 @@ public class MetaExtension {
     public ArrayList<String> libraries;
     public boolean fetch;
     public boolean isAPI = false;
+
+    public HashMap<String, String[]> repositories;
+    public HashMap<String, String[]> dependencies;
 
     public boolean validate() {
         if (version == null) {
