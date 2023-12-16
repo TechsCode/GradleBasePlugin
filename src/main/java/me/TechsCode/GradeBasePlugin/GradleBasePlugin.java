@@ -77,7 +77,12 @@ public class GradleBasePlugin implements Plugin<Project> {
             ResourceManager.createWorkflow(project, meta.isAPI);
             ResourceManager.createGradleFiles(project);
         }
-        catch (IOException ignored) {}
+        catch (IOException e) {
+            log(Color.RED + "Could not generate and copy files...");
+            log(Color.RED_BRIGHT + "There was an error generating and copying files...");
+            e.printStackTrace();
+            return;
+        }
         
         if (this.username == null || this.password == null) {
             log(Color.RED + "Missing TECHSCODE_USERNAME and/or TECHSCODE_PASSWORD environment variables!");
