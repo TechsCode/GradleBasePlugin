@@ -100,6 +100,8 @@ public class GradleBasePlugin implements Plugin<Project> {
         project.afterEvaluate((p) -> {
             log("Setting up repositories...");
             project.getRepositories().mavenLocal();
+
+            meta.repositories.put("TechsCode", "https://repo.techscode.com/repository/maven-releases/");
             meta.repositories.forEach((name, url) -> project.getRepositories().maven((maven) -> {
                 log(Color.BLUE + "Adding repository: " + name + " with url: " + url + "...");
                 maven.setName(name);
