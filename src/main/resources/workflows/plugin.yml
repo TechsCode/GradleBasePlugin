@@ -72,4 +72,4 @@ jobs:
           url: 'https://update.techscode.com/api/new-release'
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json", "Authorization": "${{ secrets.UPDATE_SERVER_API_KEY }}"}'
-          data: '{"plugin_name": "ultraeconomytest", "release_title": "Release ${{ env.projectVersion }} build-${{ github.run_number }}"}'
+          data: '{"plugin_name": "${{ env.projectName }}", "release_title": "Release ${{ env.projectVersion }} build-${{ github.run_number }}"}'
