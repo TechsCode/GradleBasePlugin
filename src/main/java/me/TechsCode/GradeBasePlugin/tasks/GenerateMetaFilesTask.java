@@ -42,8 +42,8 @@ public class GenerateMetaFilesTask extends DefaultTask {
             MetaExtension meta = MetaExtension.fromFile(propertiesFile);
             int buildNumber = getBuildNumber();
 
-            createPluginYml(resourcesFolder, getProject().getName(), meta.version, buildNumber, meta.loadAfter, meta.loadBefore, meta.load, meta.libraries);
-            createBungeeYml(resourcesFolder, getProject().getName(), meta.version, buildNumber, meta.libraries);
+            createPluginYml(resourcesFolder, getProject().getName(), meta.pluginVersion, buildNumber, meta.loadAfter, meta.loadBefore, meta.load, meta.libraries);
+            createBungeeYml(resourcesFolder, getProject().getName(), meta.pluginVersion, buildNumber, meta.libraries);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -80,7 +80,7 @@ public class GradleBasePlugin implements Plugin<Project> {
         log(Color.BLUE_BOLD_BRIGHT + "Configuring Gradle Project - Build Settings...");
         log();
         log("Project Info");
-        log("Plugin: " + project.getName() + " on Version: " + meta.version);
+        log("Plugin: " + project.getName() + " on Version: " + meta.pluginVersion);
         log();
 
         log("Generating and copying files...");
@@ -156,7 +156,7 @@ public class GradleBasePlugin implements Plugin<Project> {
         }
         
         // Setting properties
-        project.setProperty("version", meta.version);
+        project.setProperty("version", meta.pluginVersion);
         project.setProperty("sourceCompatibility", "1.8");
         project.setProperty("targetCompatibility", "1.8");
         

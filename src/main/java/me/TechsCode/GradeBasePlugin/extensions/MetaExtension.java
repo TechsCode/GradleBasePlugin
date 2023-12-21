@@ -21,7 +21,7 @@ import org.gradle.internal.impldep.com.google.api.client.json.Json;
 public class MetaExtension {
 
     public String gradleBasePluginVersion;
-    public String version;
+    public String pluginVersion;
     public String baseVersion;
     public String load;
     public ArrayList<String> loadBefore, loadAfter;
@@ -44,7 +44,7 @@ public class MetaExtension {
             JsonObject json = new Gson().fromJson(fileContent, JsonObject.class);
             MetaExtension meta = new MetaExtension();
             meta.gradleBasePluginVersion = json.get("gradleBasePluginVersion").getAsString();
-            meta.version = json.get("version").getAsString();
+            meta.pluginVersion = json.get("pluginVersion").getAsString();
             meta.baseVersion = json.get("baseVersion").getAsString();
             meta.load = json.get("load").getAsString();
 
@@ -113,7 +113,7 @@ public class MetaExtension {
     }
 
     public boolean validate() {
-        if (version == null) {
+        if (pluginVersion == null) {
             GradleBasePlugin.log("Could not find a 'meta' section with a 'version' field in your build.gradle");
             GradleBasePlugin.log();
             GradleBasePlugin.log(Color.RED + "Please check the GitHub page of GradleBasePlugin for more information");
