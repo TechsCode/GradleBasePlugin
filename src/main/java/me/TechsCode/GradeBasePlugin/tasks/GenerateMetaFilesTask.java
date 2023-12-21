@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
@@ -48,7 +49,7 @@ public class GenerateMetaFilesTask extends DefaultTask {
         }
     }
 
-    private void createPluginYml(File resourcesFolder, String projectName, String projectVersion, int buildNumber, String loadAfter, String loadBefore, String load, ArrayList<String> libraries) throws IOException {
+    private void createPluginYml(File resourcesFolder, String projectName, String projectVersion, int buildNumber, ArrayList<String> loadAfter, ArrayList<String> loadBefore, String load, ArrayList<String> libraries) throws IOException {
         File file = new File(resourcesFolder, "plugin.yml");
         file.createNewFile();
 
@@ -56,22 +57,22 @@ public class GenerateMetaFilesTask extends DefaultTask {
 
         writer.println("name: " + projectName);
         writer.println("version: " + projectVersion);
-        writer.println("author: Tech");
+        writer.println("author: TechsCode");
         writer.println("website: " + projectName + ".com");
         writer.println("build: " + buildNumber);
         writer.println("main: me.TechsCode." + getProject().getName() + ".base.loader.SpigotLoader");
         writer.println("api-version: 1.13");
 
-        if (loadAfter != null) {
-            writer.println("softdepend: " + loadAfter);
+        if (!loadAfter.isEmpty()) {
+            writer.println("softdepend: " + "[" + loadAfter.stream().map(Object::toString).reduce((a, b) -> a + ", " + b).get() + "]");
         }
-        if (loadBefore != null) {
-            writer.println("loadbefore: " + loadBefore);
+        if (!loadBefore.isEmpty()) {
+            writer.println("loadbefore: " + "[" + loadBefore.stream().map(Object::toString).reduce((a, b) -> a + ", " + b).get() + "]");
         }
         if (load != null) {
             writer.println("load: " + load);
         }
-        if (libraries != null) {
+        if (!libraries.isEmpty()) {
             writer.println("libraries:");
             libraries.stream().map(library -> "- " + library).forEach(writer::println);
         }
@@ -88,9 +89,9 @@ public class GenerateMetaFilesTask extends DefaultTask {
         writer.println("version: " + projectVersion);
         writer.println("build: " + buildNumber);
         writer.println("main: me.TechsCode." + getProject().getName() + ".base.loader.BungeeLoader");
-        writer.println("author: Tech");
+        writer.println("author: TechsCode");
         
-        if (libraries != null) {
+        if (!libraries.isEmpty()) {
             writer.println("libraries:");
             libraries.stream().map(library -> "- " + library).forEach(writer::println);
         }

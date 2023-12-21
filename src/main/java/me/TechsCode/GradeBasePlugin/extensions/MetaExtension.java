@@ -23,7 +23,8 @@ public class MetaExtension {
     public String gradleBasePluginVersion;
     public String version;
     public String baseVersion;
-    public String load, loadBefore, loadAfter;
+    public String load;
+    public ArrayList<String> loadBefore, loadAfter;
     public boolean fetch;
     public boolean isApi = false;
 
@@ -46,41 +47,63 @@ public class MetaExtension {
             meta.version = json.get("version").getAsString();
             meta.baseVersion = json.get("baseVersion").getAsString();
             meta.load = json.get("load").getAsString();
-            meta.loadBefore = json.get("loadBefore").getAsJsonArray().toString();
-            meta.loadAfter = json.get("loadAfter").getAsJsonArray().toString();
+
+            meta.loadBefore = new ArrayList<>();
+            if(json.has("loadBefore")){
+                JsonArray loadBefore = json.get("loadBefore").getAsJsonArray();
+                for (JsonElement loadBeforeElement : loadBefore) {
+                    meta.loadBefore.add(loadBeforeElement.getAsString());
+                }
+            }
+
+            meta.loadAfter = new ArrayList<>();
+            if(json.has("loadAfter")){
+                JsonArray loadAfter = json.get("loadAfter").getAsJsonArray();
+                for (JsonElement loadAfterElement : loadAfter) {
+                    meta.loadAfter.add(loadAfterElement.getAsString());
+                }
+            }
+
             meta.fetch = json.get("fetch").getAsBoolean();
             meta.isApi = json.get("isApi").getAsBoolean();
 
             meta.libraries = new ArrayList<>();
-            JsonArray libraries = json.get("libraries").getAsJsonArray();
-            for (JsonElement library : libraries) {
-                meta.libraries.add(library.getAsString());
+            if(json.has("libraries")) {
+                JsonArray libraries = json.get("libraries").getAsJsonArray();
+                for (JsonElement library : libraries) {
+                    meta.libraries.add(library.getAsString());
+                }
             }
 
             meta.repositories = new HashMap<>();
-            JsonObject repositories = json.get("repositories").getAsJsonObject();
-            for (String repository : repositories.keySet()) {
-                meta.repositories.put(repository, repositories.get(repository).getAsString());
+            if(json.has("repositories")) {
+                JsonObject repositories = json.get("repositories").getAsJsonObject();
+                for (String repository : repositories.keySet()) {
+                    meta.repositories.put(repository, repositories.get(repository).getAsString());
+                }
             }
 
             meta.dependencies = new HashMap<>();
-            JsonObject dependencies = json.get("dependencies").getAsJsonObject();
-            for (String dependency : dependencies.keySet()) {
-                JsonObject dependencyObject = dependencies.get(dependency).getAsJsonObject();
-                String scope = dependencyObject.get("scope").getAsString();
-                String url = dependencyObject.get("url").getAsString();
-                meta.dependencies.put(dependency, new String[]{scope, url});
+            if(json.has("dependencies")) {
+                JsonObject dependencies = json.get("dependencies").getAsJsonObject();
+                for (String dependency : dependencies.keySet()) {
+                    JsonObject dependencyObject = dependencies.get(dependency).getAsJsonObject();
+                    String scope = dependencyObject.get("scope").getAsString();
+                    String url = dependencyObject.get("url").getAsString();
+                    meta.dependencies.put(dependency, new String[]{scope, url});
+                }
             }
 
             JsonObject deployment = json.get("deployment").getAsJsonObject();
-
             JsonObject local = deployment.get("local").getAsJsonObject();
             meta.localDeploymentPath = local.get("path").getAsString();
 
             meta.remotes = new ArrayList<>();
-            JsonArray remotes = deployment.get("remotes").getAsJsonArray();
-            for (JsonElement remote : remotes) {
-                meta.remotes.add(new Remote(remote.getAsJsonObject()));
+            if(deployment.has("remotes")){
+                JsonArray remotes = deployment.get("remotes").getAsJsonArray();
+                for (JsonElement remote : remotes) {
+                    meta.remotes.add(new Remote(remote.getAsJsonObject()));
+                }
             }
 
             return meta;
