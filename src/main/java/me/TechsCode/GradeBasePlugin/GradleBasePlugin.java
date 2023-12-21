@@ -106,6 +106,7 @@ public class GradleBasePlugin implements Plugin<Project> {
                 log(Color.BLUE + "Adding repository: " + name + " with url: " + url + "...");
                 maven.setName(name);
                 maven.setUrl(url);
+                maven.setAllowInsecureProtocol(url.startsWith("http://"));
             }));
 
             log();
