@@ -62,7 +62,7 @@ public class GradleBasePlugin implements Plugin<Project> {
         
         // Setting up Shadow Plugin
         project.getPlugins().apply("com.github.johnrengelman.shadow");
-        getShadowJar(project).getArchiveFileName().set(project.getName() + ".jar");
+        getShadowJar(project).getArchiveFileName().set(project.getName() + "-" + project.getVersion() + ".jar");
         getShadowJar(project).setProperty("destinationDir", project.file(meta.localDeploymentPath));
         getShadowJar(project).dependsOn("generateMetaFiles");
         
@@ -179,7 +179,7 @@ public class GradleBasePlugin implements Plugin<Project> {
     /* After the build prcoess is completed, the file will be uploaded to all remotes */
     private void uploadToRemotes(Task buildTask) {
         File file = new File(meta.localDeploymentPath + '/'
-                + buildTask.getProject().getName() + ".jar");
+                + buildTask.getProject().getName() + "-" + buildTask.getProject().getVersion() + ".jar");
 
         meta.remotes.stream().filter(Remote::isEnabled)
                 .forEach(all -> all.uploadFile(file));
