@@ -111,6 +111,9 @@ public class GradleBasePlugin implements Plugin<Project> {
 
             log();
             log("Setting up dependencies...");
+            if(meta.fetch){
+                meta.dependencies.put("local-file", new String[]{"implementation", "libs/BasePlugin.jar"});
+            }
             meta.dependencies.forEach((name, confAndUrl) -> {
                 String scope = confAndUrl[0];
                 String url = confAndUrl[1];
@@ -122,6 +125,7 @@ public class GradleBasePlugin implements Plugin<Project> {
                     project.getDependencies().add(scope, url);
                 }
             });
+
         });
         log();
 
@@ -151,7 +155,6 @@ public class GradleBasePlugin implements Plugin<Project> {
             }
             else if (response == ResourceResponse.NOT_FETCH) {
                 log(Color.YELLOW + "Not fetching the build, if this is a mistake, please set fetch to true!");
-                project.getDependencies().add("implementation", project.files("libs/BasePlugin.jar"));
             }
         }
         
