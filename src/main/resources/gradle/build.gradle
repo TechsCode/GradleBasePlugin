@@ -43,7 +43,7 @@ publishing {
     publications {
         shadow(MavenPublication) { publication ->
             project.shadow.component(publication)
-            version = "${props.version}_build-${System.getenv('GITHUB_RUN_NUMBER') ?: "manual"}"
+            version = "${props.pluginVersion}_build-${System.getenv('GITHUB_RUN_NUMBER') ?: "manual"}"
         }
     }
     repositories {
