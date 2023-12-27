@@ -8,6 +8,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import me.TechsCode.GradeBasePlugin.Color;
+import me.TechsCode.GradeBasePlugin.GradleBasePlugin;
+import net.rubygrapefruit.platform.terminal.TerminalOutput;
 import org.gradle.api.Project;
 
 import me.TechsCode.GradeBasePlugin.extensions.Downloader;
@@ -51,9 +54,14 @@ public class ResourceManager {
     }
     
     public static void createGitIgnore(Project project) throws IOException {
-        Files.copy(ResourceManager.class.getResourceAsStream("/gitignore.file"), 
-                Paths.get(new File(project.getProjectDir().getAbsolutePath() + "/.gitignore").toURI()),
-                StandardCopyOption.REPLACE_EXISTING);
+        File gitIgnoreDestination = new File(project.getProjectDir().getAbsolutePath() + "/.gitignore");
+        gitIgnoreDestination.mkdirs();
+
+        InputStream src = ResourceManager.class.getResourceAsStream("/gitignore.file");
+        if(src == null) throw new IOException("Gitignore file not found in resources");
+
+        Files.copy(src, Paths.get(gitIgnoreDestination.toURI()), StandardCopyOption.REPLACE_EXISTING);
+        GradleBasePlugin.log(Color.GREEN + "Copied .gitignore file to " + gitIgnoreDestination.getAbsolutePath());
     }
     
     public static void createWorkflow(Project project, boolean isApi) throws IOException {
@@ -63,14 +71,17 @@ public class ResourceManager {
         String workflowFile;
         if(isApi){
             workflowFile = "/workflows/api.yml";
+            GradleBasePlugin.log(Color.BLUE + "Using API workflow file");
         }else{
             workflowFile = "/workflows/plugin.yml";
+            GradleBasePlugin.log(Color.BLUE + "Using Plugin workflow file");
         }
 
         InputStream src = ResourceManager.class.getResourceAsStream(workflowFile);
         if(src == null) throw new IOException("Workflow file not found in resources");
 
         Files.copy(src, Paths.get(destination.toURI()), StandardCopyOption.REPLACE_EXISTING);
+        GradleBasePlugin.log(Color.GREEN + "Copied workflow file to " + destination.getAbsolutePath());
     }
 
     public static void createGradleFiles(Project project) throws IOException {
@@ -82,6 +93,7 @@ public class ResourceManager {
         if(buildGradleSrc == null) throw new IOException("build.gradle file not found in resources");
 
         Files.copy(buildGradleSrc, Paths.get(buildGradleDestination.toURI()), StandardCopyOption.REPLACE_EXISTING);
+        GradleBasePlugin.log(Color.GREEN + "Copied build.gradle file to " + buildGradleDestination.getAbsolutePath());
     }
 
 }
