@@ -35,7 +35,7 @@ public class ResourceManager {
         libraryFile.delete();
 
         String RETRIEVE_RELEASES;
-        if(!meta.isApi){
+        if(!meta.isAPI){
             RETRIEVE_RELEASES = "https://repo.techscode.com/repository/maven-private/me/TechsCode/BasePlugin/"+version+"/BasePlugin-"+version+"-all.jar?enable-custom-header=true";
         }else{
             RETRIEVE_RELEASES = "https://repo.techscode.com/repository/maven-private/me/TechsCode/BasePluginAPI/"+version+"/BasePluginAPI-"+version+"-all.jar?enable-custom-header=true";
@@ -82,18 +82,6 @@ public class ResourceManager {
 
         Files.copy(src, Paths.get(destination.toURI()), StandardCopyOption.REPLACE_EXISTING);
         GradleBasePlugin.log(Color.GREEN + "Copied workflow file to " + destination.getAbsolutePath());
-    }
-
-    public static void createGradleFiles(Project project) throws IOException {
-        // build.gradle
-        File buildGradleDestination = new File(project.getProjectDir().getAbsolutePath() + "/build.gradle");
-        buildGradleDestination.mkdirs();
-
-        InputStream buildGradleSrc = ResourceManager.class.getResourceAsStream("/gradle/build.gradle");
-        if(buildGradleSrc == null) throw new IOException("build.gradle file not found in resources");
-
-        Files.copy(buildGradleSrc, Paths.get(buildGradleDestination.toURI()), StandardCopyOption.REPLACE_EXISTING);
-        GradleBasePlugin.log(Color.GREEN + "Copied build.gradle file to " + buildGradleDestination.getAbsolutePath());
     }
 
 }
