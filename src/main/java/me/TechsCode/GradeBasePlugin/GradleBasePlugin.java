@@ -12,7 +12,6 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar;
 
 import me.TechsCode.GradeBasePlugin.extensions.MetaExtension;
 import me.TechsCode.GradeBasePlugin.resource.ResourceManager;
-import me.TechsCode.GradeBasePlugin.resource.ResourceResponse;
 import me.TechsCode.GradeBasePlugin.tasks.GenerateMetaFilesTask;
 
 public class GradleBasePlugin implements Plugin<Project> {
@@ -88,29 +87,10 @@ public class GradleBasePlugin implements Plugin<Project> {
             log(Color.RED_BRIGHT + "Make sure that you have set the TECHSCODE_USERNAME and TECHSCODE_PASSWORD environment variables that has access to the maven-private repository!");
             return;
         }
-        if (!meta.baseVersion.equalsIgnoreCase("none")) {
-            ResourceResponse response = ResourceManager.loadBasePlugin(project, meta, username, password, meta.baseVersion);
-
-            if (response == ResourceResponse.SUCCESS) {
-                log("Successfully retrieved BasePlugin.jar from the techscode repo...");
-                project.getDependencies().add("implementation", project.files("libs/BasePlugin.jar"));
-            }
-            else if (response == ResourceResponse.FAIL_USERNAME) {
-                log(Color.RED + "Could not retrieve BasePlugin.jar from the techscode repo...");
-                log(Color.RED_BRIGHT + "Make sure that you have set the TECHSCODE_USERNAME environment variable that has access to the maven-private repository!");
-            }
-            else if (response == ResourceResponse.FAIL_PASSWORD) {
-                log(Color.RED + "Could not retrieve BasePlugin.jar from the techscode repo...");
-                log(Color.RED_BRIGHT + "Make sure that you have set the TECHSCODE_PASSWORD environment variable that has access to the maven-private repository!");
-            }
-            else if (response == ResourceResponse.FAIL) {
-                log(Color.RED + "Could not retrieve BasePlugin.jar from the techscode repo...");
-                log(Color.RED_BRIGHT + "There was an error downloading the BasePlugin.jar from the techscode repo...");
-            }
-            else if (response == ResourceResponse.NOT_FETCH) {
-                log(Color.YELLOW + "Not fetching the build, if this is a mistake, please set fetch to true!");
-                project.getDependencies().add("implementation", project.files("libs/BasePlugin.jar"));
-            }
+        if(meta.baseVersion.isEmpty() && !meta.fetch){
+            log(Color.RED + "Missing baseVersion in the gradle.properties file!");
+            log(Color.RED_BRIGHT + "Make sure that you have set the baseVersion in the gradle.properties file!");
+            return;
         }
 
         // Setting properties
@@ -123,10 +103,20 @@ public class GradleBasePlugin implements Plugin<Project> {
         project.getRepositories().mavenCentral();
         Arrays.stream(repositories)
                 .forEach(url -> project.getRepositories().maven((maven) -> maven.setUrl(url)));
+        if(meta.fetch){
+            project.getRepositories().maven((maven) ->
+                    maven.setUrl("https://repo.techscode.com/repository/maven-private/")
+            );
+        }
 
         // Setting up dependencies
         Arrays.stream(dependencies).map(entry -> entry.split("#"))
                 .forEach(confAndUrl -> project.getDependencies().add(confAndUrl[0], confAndUrl[1]));
+        if(meta.fetch){
+            project.getDependencies().add("implementation", "me.TechsCode:BasePlugin:" + meta.baseVersion);
+        }else{
+            project.getDependencies().add("implementation", project.files("libs/BasePlugin.jar"));
+        }
 
         // Setting up relocations
         Arrays.stream(relocations).map(entry -> entry.split("#"))
