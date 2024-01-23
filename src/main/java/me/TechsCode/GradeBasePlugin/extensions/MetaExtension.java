@@ -13,7 +13,6 @@ public class MetaExtension {
     public ArrayList<String> libraries;
     public boolean fetch;
     public boolean isAPI = false;
-    public String localDeploymentPath;
 
     public boolean configValid() {
         if (pluginVersion == null) {
@@ -24,12 +23,6 @@ public class MetaExtension {
         }
         if (baseVersion == null) {
             GradleBasePlugin.log("Could not find a 'baseVersion' field in your build.gradle");
-            GradleBasePlugin.log();
-            GradleBasePlugin.log(Color.RED + "Please check the build.gradle of your project");
-            return false;
-        }
-        if (localDeploymentPath == null) {
-            GradleBasePlugin.log("Could not find a 'localDeploymentPath' field in your build.gradle");
             GradleBasePlugin.log();
             GradleBasePlugin.log(Color.RED + "Please check the build.gradle of your project");
             return false;

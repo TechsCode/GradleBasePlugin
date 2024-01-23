@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
+import me.TechsCode.GradeBasePlugin.resource.ResourceResponse;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.Task;
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar;
 
@@ -70,14 +70,18 @@ public class GradleBasePlugin implements Plugin<Project> {
         getShadowJar(project).dependsOn("generateMetaFiles");
         getShadowJar(project).setProperty("archiveClassifier", "");
 
-        // project.getTasks().getByName("build").dependsOn("shadowJar");
-        project.getTasks().getByName("build").doLast(this::uploadToRemotes);
+        project.getTasks().getByName("build").dependsOn("shadowJar");
 
-        // Add onProjectEvaluation hook
-        project.afterEvaluate(this::onProjectEvaluation);
+        // Add projectEvaluation hooks
+        project.afterEvaluate(this::afterProjectEvaluation);
     }
 
-    private void onProjectEvaluation(Project project) {
+    private void afterProjectEvaluation(Project project) {
+        // Setting properties
+        project.setProperty("version", meta.pluginVersion);
+        project.setProperty("sourceCompatibility", "1.8");
+        project.setProperty("targetCompatibility", "1.8");
+
         if (!meta.configValid()) {
             return;
         }
@@ -98,44 +102,42 @@ public class GradleBasePlugin implements Plugin<Project> {
             return;
         }
 
-        // Setting properties
-        project.setProperty("version", meta.pluginVersion);
-        project.setProperty("sourceCompatibility", "1.8");
-        project.setProperty("targetCompatibility", "1.8");
+        ResourceResponse response = ResourceManager.loadBasePlugin(project, meta, username, password, meta.baseVersion);
+        if (response == ResourceResponse.SUCCESS) {
+            log("Successfully retrieved BasePlugin.jar from the techscode repo...");
+            project.getDependencies().add("implementation", project.files("libs/BasePlugin.jar"));
+        } else if (response == ResourceResponse.FAIL_USERNAME) {
+            log(Color.RED + "Could not retrieve BasePlugin.jar from the techscode repo...");
+            log(Color.RED_BRIGHT + "Make sure that you have set the TECHSCODE_USERNAME environment variable that has access to the maven-private repository!");
+        } else if (response == ResourceResponse.FAIL_PASSWORD) {
+            log(Color.RED + "Could not retrieve BasePlugin.jar from the techscode repo...");
+            log(Color.RED_BRIGHT + "Make sure that you have set the TECHSCODE_PASSWORD environment variable that has access to the maven-private repository!");
+        } else if (response == ResourceResponse.FAIL) {
+            log(Color.RED + "Could not retrieve BasePlugin.jar from the techscode repo...");
+            log(Color.RED_BRIGHT + "There was an error downloading the BasePlugin.jar from the techscode repo...");
+        } else if (response == ResourceResponse.NOT_FETCH) {
+            log(Color.YELLOW + "Not fetching the build, if this is a mistake, please set fetch to true!");
+            project.getDependencies().add("implementation", project.files("libs/BasePlugin.jar"));
+        } else {
+            log(Color.RED + "Could not retrieve BasePlugin.jar from the techscode repo...");
+            log(Color.RED_BRIGHT + "There was an error downloading the BasePlugin.jar from the techscode repo...");
+            log(Color.RED_BRIGHT + "Error: " + response.name());
+        }
 
         // Setting up repositories
         project.getRepositories().mavenLocal();
         project.getRepositories().mavenCentral();
         Arrays.stream(repositories)
                 .forEach(url -> project.getRepositories().maven((maven) -> maven.setUrl(url)));
-        if(meta.fetch){
-            project.getRepositories().maven((maven) ->
-                    maven.setUrl("https://repo.techscode.com/repository/maven-private/")
-            );
-        }
 
         // Setting up dependencies
         Arrays.stream(dependencies).map(entry -> entry.split("#"))
                 .forEach(confAndUrl -> project.getDependencies().add(confAndUrl[0], confAndUrl[1]));
-        if(meta.fetch){
-            project.getDependencies().add("implementation", "me.TechsCode:BasePlugin:" + meta.baseVersion);
-        }else{
-            project.getDependencies().add("implementation", project.files("libs/BasePlugin.jar"));
-        }
 
         // Setting up relocations
         Arrays.stream(relocations).map(entry -> entry.split("#"))
                 .forEach(fromTo -> getShadowJar(project).relocate(fromTo[0],
                         fromTo[1].replace("PROJECT_NAME", project.getName())));
-    }
-
-    /* After the build prcoess is completed, the file will be uploaded to all remotes */
-    private void uploadToRemotes(Task buildTask) {
-        File file = new File(meta.localDeploymentPath + '/'
-                + buildTask.getProject().getName() + "-" + meta.pluginVersion + ".jar");
-
-//        meta.remotes.stream().filter(Remote::isEnabled)
-//                .forEach(all -> all.uploadFile(file));
     }
 
     private ShadowJar getShadowJar(Project project) {
