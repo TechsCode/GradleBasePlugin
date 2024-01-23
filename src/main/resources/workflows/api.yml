@@ -22,13 +22,6 @@ jobs:
       - name: Grant Gradlew Permissions
         run: chmod +x gradlew
 
-      - name: Publish with Gradle
-        run: ./gradlew publish
-        env:
-          GITHUB_RUN_NUMBER: ${{ github.run_number }}
-          TECHSCODE_USERNAME: ${{ secrets.TECHSCODE_USERNAME }}
-          TECHSCODE_PASSWORD: ${{ secrets.TECHSCODE_PASSWORD }}
-
       - name: Build with Gradle
         run: ./gradlew shadowjar
         env:
@@ -36,10 +29,33 @@ jobs:
           TECHSCODE_PASSWORD: ${{ secrets.TECHSCODE_PASSWORD }}
 
       - name: Retrieve Project Name & Version
+        id: project
         run: |
           echo "projectName=$(./gradlew properties | grep ^name: | cut -c 7-)" >> $GITHUB_ENV
           echo "projectVersion=$(./gradlew properties | grep ^version: | cut -c 10-)" >> $GITHUB_ENV
         env:
+          TECHSCODE_USERNAME: ${{ secrets.TECHSCODE_USERNAME }}
+          TECHSCODE_PASSWORD: ${{ secrets.TECHSCODE_PASSWORD }}
+
+      - name: Check if version has changed
+        id: version_check
+        run: |
+          OLD_VERSION=$(git show HEAD~1:./gradlew properties | grep ^version: | cut -c 10-)
+          NEW_VERSION=$(./gradlew properties | grep ^version: | cut -c 10-)
+          if [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
+            echo "::set-output name=versionChanged::true"
+          else
+            echo "::set-output name=versionChanged::false"
+          fi
+        env:
+          TECHSCODE_USERNAME: ${{ secrets.TECHSCODE_USERNAME }}
+          TECHSCODE_PASSWORD: ${{ secrets.TECHSCODE_PASSWORD }}
+
+      - name: Publish with Gradle
+        if: ${{ steps.version_check.outputs.versionChanged == 'true' }}
+        run: ./gradlew publish
+        env:
+          GITHUB_RUN_NUMBER: ${{ github.run_number }}
           TECHSCODE_USERNAME: ${{ secrets.TECHSCODE_USERNAME }}
           TECHSCODE_PASSWORD: ${{ secrets.TECHSCODE_PASSWORD }}
 
