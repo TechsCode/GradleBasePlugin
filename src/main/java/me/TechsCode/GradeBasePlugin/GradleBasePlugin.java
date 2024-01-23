@@ -58,10 +58,15 @@ public class GradleBasePlugin implements Plugin<Project> {
         // Registering GradleBasePlugin tasks
         project.getTasks().create("generateMetaFiles", GenerateMetaFilesTask.class);
 
+        File destinationDir = project.getBuildDir().toPath().resolve("libs").toFile();
+        if (!destinationDir.exists()) {
+            destinationDir.mkdirs();
+        }
+
         // Setting up Shadow Plugin
         project.getPlugins().apply("com.github.johnrengelman.shadow");
         getShadowJar(project).getArchiveFileName().set(project.getName() + ".jar");
-        getShadowJar(project).setProperty("destinationDir", project.file("build"));
+        getShadowJar(project).getDestinationDirectory().set(destinationDir);
         getShadowJar(project).dependsOn("generateMetaFiles");
         getShadowJar(project).setProperty("archiveClassifier", "");
 
