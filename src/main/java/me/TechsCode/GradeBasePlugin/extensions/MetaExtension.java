@@ -45,10 +45,6 @@ public class MetaExtension {
             GradleBasePlugin.log(Color.RED + "Please check the build.gradle of your project");
             return false;
         }
-        if (libraries == null) {
-            GradleBasePlugin.log("Could not find a 'libraries' field in your build.gradle");
-            GradleBasePlugin.log();
-            GradleBasePlugin.log(Color.RED + "Please check the build.gradle of your project");
             return false;
         }
         if (fetch) {
