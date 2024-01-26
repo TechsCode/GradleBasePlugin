@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import me.TechsCode.GradeBasePlugin.Logger;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 
@@ -16,7 +17,7 @@ public class GenerateMetaFilesTask extends DefaultTask {
 
     @TaskAction
     public void generateMetaFiles() {
-        GradleBasePlugin.log(Color.BLUE_BRIGHT + "Generating Plugin.yml & Bungee.yml......");
+        Logger.info(Color.BLUE_BRIGHT + "Generating Plugin.yml & Bungee.yml......");
 
         File resourcesFolder = new File(getProject().getBuildDir().getAbsolutePath() + "/resources/main");
         resourcesFolder.mkdirs();

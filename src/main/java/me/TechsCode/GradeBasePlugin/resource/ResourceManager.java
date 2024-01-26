@@ -10,6 +10,7 @@ import java.nio.file.StandardCopyOption;
 
 import me.TechsCode.GradeBasePlugin.Color;
 import me.TechsCode.GradeBasePlugin.GradleBasePlugin;
+import me.TechsCode.GradeBasePlugin.Logger;
 import net.rubygrapefruit.platform.terminal.TerminalOutput;
 import org.gradle.api.Project;
 
@@ -62,7 +63,7 @@ public class ResourceManager {
         if(src == null) throw new IOException("Gitignore file not found in resources");
 
         Files.copy(src, Paths.get(gitIgnoreDestination.toURI()), StandardCopyOption.REPLACE_EXISTING);
-        GradleBasePlugin.log(Color.GREEN + "Copied .gitignore file to " + gitIgnoreDestination.getPath());
+        Logger.info(Color.GREEN + "Copied .gitignore file to " + gitIgnoreDestination.getPath());
     }
     
     public static void createWorkflow(Project project, boolean isApi) throws IOException {
@@ -72,17 +73,17 @@ public class ResourceManager {
         String workflowFile;
         if(isApi){
             workflowFile = "/workflows/api.yml";
-            GradleBasePlugin.log(Color.BLUE + "Using API workflow file");
+            Logger.info(Color.BLUE + "Using API workflow file");
         }else{
             workflowFile = "/workflows/plugin.yml";
-            GradleBasePlugin.log(Color.BLUE + "Using Plugin workflow file");
+            Logger.info(Color.BLUE + "Using Plugin workflow file");
         }
 
         InputStream src = ResourceManager.class.getResourceAsStream(workflowFile);
         if(src == null) throw new IOException("Workflow file not found in resources");
 
         Files.copy(src, Paths.get(destination.toURI()), StandardCopyOption.REPLACE_EXISTING);
-        GradleBasePlugin.log(Color.GREEN + "Copied workflow file to " + destination.getPath());
+        Logger.info(Color.GREEN + "Copied workflow file to " + destination.getPath());
     }
 
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import me.TechsCode.GradeBasePlugin.Color;
 import me.TechsCode.GradeBasePlugin.GradleBasePlugin;
+import me.TechsCode.GradeBasePlugin.Logger;
 
 public class MetaExtension {
 
@@ -16,42 +17,52 @@ public class MetaExtension {
 
     public boolean configValid() {
         if (pluginVersion == null) {
-            GradleBasePlugin.log("Could not find a 'pluginVersion' field in your build.gradle");
-            GradleBasePlugin.log();
-            GradleBasePlugin.log(Color.RED + "Please check the build.gradle of your project");
+            Logger.error(
+                    "Could not find a 'pluginVersion' field in your build.gradle",
+                    "",
+                    "Please check the build.gradle of your project and make sure you have a 'pluginVersion' field in your 'meta' extension"
+            );
             return false;
         }
         if (baseVersion == null) {
-            GradleBasePlugin.log("Could not find a 'baseVersion' field in your build.gradle");
-            GradleBasePlugin.log();
-            GradleBasePlugin.log(Color.RED + "Please check the build.gradle of your project");
+            Logger.error(
+                    "Could not find a 'baseVersion' field in your build.gradle",
+                    "",
+                    "Please check the build.gradle of your project and make sure you have a 'baseVersion' field in your 'meta' extension"
+            );
             return false;
         }
         if (loadAfter == null) {
-            GradleBasePlugin.log("Could not find a 'loadAfter' field in your build.gradle");
-            GradleBasePlugin.log();
-            GradleBasePlugin.log(Color.RED + "Please check the build.gradle of your project");
+            Logger.error(
+                    "Could not find a 'loadAfter' field in your build.gradle",
+                    "",
+                    "Please check the build.gradle of your project and make sure you have a 'loadAfter' field in your 'meta' extension"
+            );
             return false;
         }
         if (loadBefore == null) {
-            GradleBasePlugin.log("Could not find a 'loadBefore' field in your build.gradle");
-            GradleBasePlugin.log();
-            GradleBasePlugin.log(Color.RED + "Please check the build.gradle of your project");
+            Logger.error(
+                    "Could not find a 'loadBefore' field in your build.gradle",
+                    "",
+                    "Please check the build.gradle of your project and make sure you have a 'loadBefore' field in your 'meta' extension"
+            );
             return false;
         }
         if (load == null) {
-            GradleBasePlugin.log("Could not find a 'load' field in your build.gradle");
-            GradleBasePlugin.log();
-            GradleBasePlugin.log(Color.RED + "Please check the build.gradle of your project");
-            return false;
-        }
+            Logger.error(
+                    "Could not find a 'load' field in your build.gradle",
+                    "",
+                    "Please check the build.gradle of your project and make sure you have a 'load' field in your 'meta' extension"
+            );
             return false;
         }
         if (fetch) {
             if(System.getenv("TECHSCODE_USERNAME") == null || System.getenv("TECHSCODE_PASSWORD") == null) {
-                GradleBasePlugin.log("Could not find a 'TECHSCODE_USERNAME' or 'TECHSCODE_PASSWORD' environment variable");
-                GradleBasePlugin.log();
-                GradleBasePlugin.log(Color.RED + "Please set the 'TECHSCODE_USERNAME' and 'TECHSCODE_PASSWORD' environment variables");
+                Logger.error(
+                        "Could not find a 'TECHSCODE_USERNAME' or 'TECHSCODE_PASSWORD' environment variable",
+                        "",
+                        "Please make sure you have set the 'TECHSCODE_USERNAME' and 'TECHSCODE_PASSWORD' environment variables"
+                );
                 return false;
             }
         }

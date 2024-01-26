@@ -41,9 +41,11 @@ public class GradleBasePlugin implements Plugin<Project> {
     
     @Override
     public void apply(Project project) {
-        log(Color.BLUE_BOLD_BRIGHT + "Applying GradleBasePlugin to " + project.getName() + "...");
-        log();
-        log("Project Info");
+        Logger.info(
+                Color.BLUE_BOLD_BRIGHT + "Applying GradleBasePlugin to " + project.getName() + "...",
+                "",
+                "Project Information:"
+        );
         this.meta = project.getExtensions().create("meta", MetaExtension.class);
 
         this.username = System.getenv("TECHSCODE_USERNAME");
@@ -83,45 +85,71 @@ public class GradleBasePlugin implements Plugin<Project> {
         project.setProperty("targetCompatibility", "1.8");
 
         if (!meta.configValid()) {
+            Logger.error(
+                    " _____",
+                    "| ____|_ __ _ __ ___  _ __",
+                    "|  _| | '__| '__/ _ \\| '__|",
+                    "| |___| |  | | | (_) | |",
+                    "|_____|_|  |_|  \\___/|_|",
+                    "--------------------------------------------------------------------------------",
+                    "Failed to configure Gradle Project - Build Settings",
+                    "",
+                    "Please check the build.gradle of your project and make sure you have all the required fields in your 'meta' extension",
+                    "--------------------------------------------------------------------------------"
+            );
             return;
         }
-        log(Color.BLUE_BOLD_BRIGHT + "Configuring Gradle Project - Build Settings...");
-        log();
-        log("Project Info");
-        log("Plugin: " + project.getName() + " on Version: " + meta.pluginVersion);
-        log();
 
-        if (this.username == null || this.password == null) {
-            log(Color.RED + "Missing TECHSCODE_USERNAME and/or TECHSCODE_PASSWORD environment variables!");
-            log(Color.RED_BRIGHT + "Make sure that you have set the TECHSCODE_USERNAME and TECHSCODE_PASSWORD environment variables that has access to the maven-private repository!");
-            return;
-        }
-        if(meta.baseVersion.isEmpty() && !meta.fetch){
-            log(Color.RED + "Missing baseVersion in the gradle.properties file!");
-            log(Color.RED_BRIGHT + "Make sure that you have set the baseVersion in the gradle.properties file!");
-            return;
-        }
+        Logger.info(
+                "Plugin: " + project.getName() + " on Version: " + meta.pluginVersion,
+                "",
+                "Configuring Gradle Project - Build Settings:"
+        );
 
         ResourceResponse response = ResourceManager.loadBasePlugin(project, meta, username, password, meta.baseVersion);
         if (response == ResourceResponse.SUCCESS) {
-            log("Successfully retrieved BasePlugin.jar from the techscode repo...");
+            Logger.info(
+                    "Successfully retrieved BasePlugin.jar from the techscode repo...",
+                    "Adding BasePlugin.jar to the dependencies..."
+            );
             project.getDependencies().add("implementation", project.files("libs/BasePlugin.jar"));
         } else if (response == ResourceResponse.FAIL_USERNAME) {
-            log(Color.RED + "Could not retrieve BasePlugin.jar from the techscode repo...");
-            log(Color.RED_BRIGHT + "Make sure that you have set the TECHSCODE_USERNAME environment variable that has access to the maven-private repository!");
+            Logger.error(
+                    "Could not retrieve BasePlugin.jar from the techscode repo...",
+                    "Make sure that you have set the TECHSCODE_USERNAME environment variable that has access to the maven-private repository!"
+            );
+            return;
         } else if (response == ResourceResponse.FAIL_PASSWORD) {
-            log(Color.RED + "Could not retrieve BasePlugin.jar from the techscode repo...");
-            log(Color.RED_BRIGHT + "Make sure that you have set the TECHSCODE_PASSWORD environment variable that has access to the maven-private repository!");
+            Logger.error(
+                    "Could not retrieve BasePlugin.jar from the techscode repo...",
+                    "Make sure that you have set the TECHSCODE_PASSWORD environment variable that has access to the maven-private repository!"
+            );
+            return;
         } else if (response == ResourceResponse.FAIL) {
-            log(Color.RED + "Could not retrieve BasePlugin.jar from the techscode repo...");
-            log(Color.RED_BRIGHT + "There was an error downloading the BasePlugin.jar from the techscode repo...");
+            Logger.error(
+                    "Could not retrieve BasePlugin.jar from the techscode repo...",
+                    "There was an error downloading the BasePlugin.jar from the techscode repo..."
+            );
+            return;
         } else if (response == ResourceResponse.NOT_FETCH) {
-            log(Color.YELLOW + "Not fetching the build, if this is a mistake, please set fetch to true!");
+            Logger.warning(
+                    "Fetching is disabled in your build.gradle...",
+                    "Not fetching the build, if this is a mistake, please set fetch to true!"
+            );
             project.getDependencies().add("implementation", project.files("libs/BasePlugin.jar"));
         } else {
-            log(Color.RED + "Could not retrieve BasePlugin.jar from the techscode repo...");
-            log(Color.RED_BRIGHT + "There was an error downloading the BasePlugin.jar from the techscode repo...");
-            log(Color.RED_BRIGHT + "Error: " + response.name());
+            Logger.error(
+                    " _____",
+                    "| ____|_ __ _ __ ___  _ __",
+                    "|  _| | '__| '__/ _ \\| '__|",
+                    "| |___| |  | | | (_) | |",
+                    "|_____|_|  |_|  \\___/|_|",
+                    "--------------------------------------------------------------------------------",
+                    "Failed to configure Gradle Project - Build Settings",
+                    "",
+                    "Please check the build.gradle of your project and make sure you have all the required fields in your 'meta' extension",
+                    "--------------------------------------------------------------------------------"
+            );
         }
 
         // Setting up repositories
@@ -142,13 +170,5 @@ public class GradleBasePlugin implements Plugin<Project> {
 
     private ShadowJar getShadowJar(Project project) {
         return (ShadowJar) project.getTasks().getByName("shadowJar");
-    }
-
-    public static void log(String message) {
-        System.out.println(Color.RESET + message + Color.RESET);
-    }
-
-    public static void log() {
-        System.out.println();
     }
 }
