@@ -56,6 +56,14 @@ public class MetaExtension {
             );
             return false;
         }
+        if (libraries == null) {
+            Logger.error(
+                    "Could not find a 'libraries' field in your build.gradle",
+                    "",
+                    "Please check the build.gradle of your project and make sure you have a 'libraries' field in your 'meta' extension"
+            );
+            return false;
+        }
         if (fetch) {
             if(System.getenv("TECHSCODE_USERNAME") == null || System.getenv("TECHSCODE_PASSWORD") == null) {
                 Logger.error(
