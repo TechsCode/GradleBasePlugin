@@ -20,7 +20,7 @@ public class Logger {
      * @param message
      */
     public static void info(String message) {
-        System.out.println(Color.GREEN + "[INFO]" + Color.RESET + message);
+        System.out.println(Color.GREEN + "[INFO] " + Color.RESET + message);
     }
 
     /**
@@ -38,7 +38,7 @@ public class Logger {
      * @param message
      */
     public static void warning(String message) {
-        System.err.println(Color.GREEN + "[WARN]" + Color.RESET + message);
+        System.err.println(Color.GREEN + "[WARN] " + Color.RESET + message);
     }
 
     /**
@@ -56,6 +56,6 @@ public class Logger {
      * @param message
      */
     public static void error(String message) {
-        System.err.println(Color.GREEN + "[ERROR]" + Color.RESET + message);
+        System.err.println(Color.GREEN + "[ERROR] " + Color.RESET + message);
     }
 }
