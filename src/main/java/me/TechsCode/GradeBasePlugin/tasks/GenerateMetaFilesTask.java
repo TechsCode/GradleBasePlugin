@@ -44,7 +44,7 @@ public class GenerateMetaFilesTask extends DefaultTask {
         writer.println("author: Tech");
         writer.println("website: " + projectName + ".com");
         writer.println("build: " + buildNumber);
-        writer.println("main: me.TechsCode." + getProject().getName() + ".base.loader.SpigotLoader");
+        writer.println("main: me.techscode." + getProject().getName() + ".base.loader.SpigotLoader");
         writer.println("api-version: 1.13");
 
         if (loadAfter != null) {
