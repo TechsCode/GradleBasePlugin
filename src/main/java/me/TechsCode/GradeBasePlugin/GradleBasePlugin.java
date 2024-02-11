@@ -166,8 +166,6 @@ public class GradleBasePlugin implements Plugin<Project> {
         Arrays.stream(relocations).map(entry -> entry.split("#"))
                 .forEach(fromTo -> getShadowJar(project).relocate(fromTo[0],
                         fromTo[1].replace("PROJECT_NAME", project.getName())));
-
-        Logger.warning(project.getName());
     }
 
     private ShadowJar getShadowJar(Project project) {
