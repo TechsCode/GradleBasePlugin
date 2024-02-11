@@ -72,7 +72,7 @@ public class GenerateMetaFilesTask extends DefaultTask {
         writer.println("name: " + projectName);
         writer.println("version: " + projectVersion);
         writer.println("build: " + buildNumber);
-        writer.println("main: me.TechsCode." + getProject().getName() + ".base.loader.BungeeLoader");
+        writer.println("main: me.techscode." + getProject().getName() + ".base.loader.BungeeLoader");
         writer.println("author: Tech");
 
         if (libraries != null) {

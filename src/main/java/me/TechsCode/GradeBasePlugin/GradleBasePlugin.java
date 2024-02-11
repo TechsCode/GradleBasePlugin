@@ -30,9 +30,9 @@ public class GradleBasePlugin implements Plugin<Project> {
     };
     
     private static final String[] relocations = new String[] {
-            "me.TechsCode.base#me.TechsCode.PROJECT_NAME.base",
-            "me.TechsCode.tpl#me.TechsCode.PROJECT_NAME.tpl",
-            "me.TechsCode.dependencies#me.TechsCode.PROJECT_NAME.dependencies"
+            "me.techscode.base#me.techscode.PROJECT_NAME.base",
+            "me.techscode.tpl#me.techscode.PROJECT_NAME.tpl",
+            "me.techscode.dependencies#me.techscode.PROJECT_NAME.dependencies"
     };
 
     private MetaExtension meta;
