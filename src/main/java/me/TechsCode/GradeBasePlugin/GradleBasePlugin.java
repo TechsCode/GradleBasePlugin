@@ -25,14 +25,14 @@ public class GradleBasePlugin implements Plugin<Project> {
     };
     
     private static final String[] dependencies = new String[] {
-            "compileOnly#org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT",
+            "compileOnly#org.spigotmc:spigot-api:1.20.6-R0.1-SNAPSHOT",
             "compileOnly#net.md-5:bungeecord-api:1.20-R0.1-SNAPSHOT"
     };
     
     private static final String[] relocations = new String[] {
-            "com.techscode.base#com.techscode.PROJECT_NAME.base",
-            "com.techscode.tpl#com.techscode.PROJECT_NAME.tpl",
-            "com.techscode.dependencies#com.techscode.PROJECT_NAME.dependencies"
+            "me.TechsCode.base#me.TechsCode.PROJECT_NAME.base",
+            "me.TechsCode.tpl#me.TechsCode.PROJECT_NAME.tpl",
+            "me.TechsCode.dependencies#me.TechsCode.PROJECT_NAME.dependencies"
     };
 
     private MetaExtension meta;
