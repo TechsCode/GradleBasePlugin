@@ -1,10 +1,8 @@
-package me.TechsCode.GradeBasePlugin.extensions;
+package com.techscode.GradeBasePlugin.extensions;
 
 import java.util.ArrayList;
 
-import me.TechsCode.GradeBasePlugin.Color;
-import me.TechsCode.GradeBasePlugin.GradleBasePlugin;
-import me.TechsCode.GradeBasePlugin.Logger;
+import com.techscode.GradeBasePlugin.Logger;
 
 public class MetaExtension {
 

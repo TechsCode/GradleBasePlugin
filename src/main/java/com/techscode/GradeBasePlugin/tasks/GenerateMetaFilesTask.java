@@ -1,17 +1,15 @@
-package me.TechsCode.GradeBasePlugin.tasks;
+package com.techscode.GradeBasePlugin.tasks;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import me.TechsCode.GradeBasePlugin.Logger;
+import com.techscode.GradeBasePlugin.Color;
+import com.techscode.GradeBasePlugin.Logger;
+import com.techscode.GradeBasePlugin.extensions.MetaExtension;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
-
-import me.TechsCode.GradeBasePlugin.Color;
-import me.TechsCode.GradeBasePlugin.GradleBasePlugin;
-import me.TechsCode.GradeBasePlugin.extensions.MetaExtension;
 
 public class GenerateMetaFilesTask extends DefaultTask {
 

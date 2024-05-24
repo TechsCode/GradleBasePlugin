@@ -1,18 +1,18 @@
-package me.TechsCode.GradeBasePlugin;
+package com.techscode.GradeBasePlugin;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
-import me.TechsCode.GradeBasePlugin.resource.ResourceResponse;
+import com.techscode.GradeBasePlugin.resource.ResourceResponse;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar;
 
-import me.TechsCode.GradeBasePlugin.extensions.MetaExtension;
-import me.TechsCode.GradeBasePlugin.resource.ResourceManager;
-import me.TechsCode.GradeBasePlugin.tasks.GenerateMetaFilesTask;
+import com.techscode.GradeBasePlugin.extensions.MetaExtension;
+import com.techscode.GradeBasePlugin.resource.ResourceManager;
+import com.techscode.GradeBasePlugin.tasks.GenerateMetaFilesTask;
 
 public class GradleBasePlugin implements Plugin<Project> {
 
@@ -30,9 +30,9 @@ public class GradleBasePlugin implements Plugin<Project> {
     };
     
     private static final String[] relocations = new String[] {
-            "me.TechsCode.base#me.TechsCode.PROJECT_NAME.base",
-            "me.TechsCode.tpl#me.TechsCode.PROJECT_NAME.tpl",
-            "me.TechsCode.dependencies#me.TechsCode.PROJECT_NAME.dependencies"
+            "com.techscode.base#me.TechsCode.PROJECT_NAME.base",
+            "com.techscode.tpl#me.TechsCode.PROJECT_NAME.tpl",
+            "com.techscode.dependencies#me.TechsCode.PROJECT_NAME.dependencies"
     };
 
     private MetaExtension meta;

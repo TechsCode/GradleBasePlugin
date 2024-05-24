@@ -1,4 +1,4 @@
-package me.TechsCode.GradeBasePlugin.resource;
+package com.techscode.GradeBasePlugin.resource;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,14 +8,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-import me.TechsCode.GradeBasePlugin.Color;
-import me.TechsCode.GradeBasePlugin.GradleBasePlugin;
-import me.TechsCode.GradeBasePlugin.Logger;
-import net.rubygrapefruit.platform.terminal.TerminalOutput;
+import com.techscode.GradeBasePlugin.Color;
+import com.techscode.GradeBasePlugin.Logger;
+import com.techscode.GradeBasePlugin.extensions.Downloader;
+import com.techscode.GradeBasePlugin.extensions.MetaExtension;
 import org.gradle.api.Project;
-
-import me.TechsCode.GradeBasePlugin.extensions.Downloader;
-import me.TechsCode.GradeBasePlugin.extensions.MetaExtension;
 
 public class ResourceManager {
 

@@ -1,11 +1,10 @@
-package me.TechsCode.GradeBasePlugin.extensions;
+package com.techscode.GradeBasePlugin.extensions;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Base64;
 
-import me.TechsCode.GradeBasePlugin.GradleBasePlugin;
 import org.apache.commons.io.FileUtils;
 
 import org.apache.hc.client5.http.classic.methods.HttpGet;
