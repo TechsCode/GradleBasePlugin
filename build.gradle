@@ -12,7 +12,7 @@ def artifactId = 'GradleBasePlugin'
 //                      /---> Major Version - Increment this when you make a breaking change
 //                      | /---> Minor Version - Increment this when you add a new feature
 //                      | |  /---> Patch Version - Increment this when you make a bug fix
-def versionNum = '5.0.2'
+def versionNum = '5.0.3'
 
 group = groupId
 version = versionNum
@@ -57,5 +57,3 @@ publishing {
         }
     }
 }
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
