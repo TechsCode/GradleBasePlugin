@@ -59,6 +59,8 @@ public class GenerateMetaFilesTask extends DefaultTask {
         if (libraries != null) {
             writer.println("libraries:");
             libraries.stream().map(library -> "- " + library).forEach(writer::println);
+        } else {
+            writer.println("libraries: []");
         }
         writer.close();
     }
@@ -78,6 +80,8 @@ public class GenerateMetaFilesTask extends DefaultTask {
         if (libraries != null) {
             writer.println("libraries:");
             libraries.stream().map(library -> "- " + library).forEach(writer::println);
+        } else {
+            writer.println("libraries: []");
         }
         writer.close();
     }
