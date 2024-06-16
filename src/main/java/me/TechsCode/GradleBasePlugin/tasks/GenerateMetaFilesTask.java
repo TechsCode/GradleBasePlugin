@@ -1,13 +1,13 @@
-package com.techscode.GradeBasePlugin.tasks;
+package me.TechsCode.GradleBasePlugin.tasks;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import com.techscode.GradeBasePlugin.Color;
-import com.techscode.GradeBasePlugin.Logger;
-import com.techscode.GradeBasePlugin.extensions.MetaExtension;
+import me.TechsCode.GradleBasePlugin.Color;
+import me.TechsCode.GradleBasePlugin.Logger;
+import me.TechsCode.GradleBasePlugin.extensions.MetaExtension;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 
@@ -42,7 +42,7 @@ public class GenerateMetaFilesTask extends DefaultTask {
         writer.println("author: Tech");
         writer.println("website: " + projectName + ".com");
         writer.println("build: " + buildNumber);
-        writer.println("main: com.techscode." + getProject().getName() + ".base.loader.SpigotLoader");
+        writer.println("main: me.TechsCode." + getProject().getName() + ".base.loader.SpigotLoader");
         writer.println("api-version: 1.13");
 
         if (loadAfter != null) {
@@ -57,6 +57,8 @@ public class GenerateMetaFilesTask extends DefaultTask {
         if (libraries != null) {
             writer.println("libraries:");
             libraries.stream().map(library -> "- " + library).forEach(writer::println);
+        } else {
+            writer.println("libraries: []");
         }
         writer.close();
     }
@@ -70,12 +72,14 @@ public class GenerateMetaFilesTask extends DefaultTask {
         writer.println("name: " + projectName);
         writer.println("version: " + projectVersion);
         writer.println("build: " + buildNumber);
-        writer.println("main: com.techscode." + getProject().getName() + ".base.loader.BungeeLoader");
+        writer.println("main: me.TechsCode." + getProject().getName() + ".base.loader.BungeeLoader");
         writer.println("author: Tech");
 
         if (libraries != null) {
             writer.println("libraries:");
             libraries.stream().map(library -> "- " + library).forEach(writer::println);
+        } else {
+            writer.println("libraries: []");
         }
         writer.close();
     }

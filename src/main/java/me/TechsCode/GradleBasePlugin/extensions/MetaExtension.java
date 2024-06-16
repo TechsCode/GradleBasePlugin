@@ -1,8 +1,8 @@
-package com.techscode.GradeBasePlugin.extensions;
+package me.TechsCode.GradleBasePlugin.extensions;
 
 import java.util.ArrayList;
 
-import com.techscode.GradeBasePlugin.Logger;
+import me.TechsCode.GradleBasePlugin.Logger;
 
 public class MetaExtension {
 

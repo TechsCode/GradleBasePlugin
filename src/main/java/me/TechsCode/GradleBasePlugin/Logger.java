@@ -1,4 +1,4 @@
-package com.techscode.GradeBasePlugin;
+package me.TechsCode.GradleBasePlugin;
 
 /**
  * Logging util making it easier to log messages to the console

@@ -1,18 +1,18 @@
-package com.techscode.GradeBasePlugin;
+package me.TechsCode.GradleBasePlugin;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
-import com.techscode.GradeBasePlugin.resource.ResourceResponse;
+import me.TechsCode.GradleBasePlugin.extensions.MetaExtension;
+import me.TechsCode.GradleBasePlugin.resource.ResourceManager;
+import me.TechsCode.GradleBasePlugin.resource.ResourceResponse;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar;
 
-import com.techscode.GradeBasePlugin.extensions.MetaExtension;
-import com.techscode.GradeBasePlugin.resource.ResourceManager;
-import com.techscode.GradeBasePlugin.tasks.GenerateMetaFilesTask;
+import me.TechsCode.GradleBasePlugin.tasks.GenerateMetaFilesTask;
 
 public class GradleBasePlugin implements Plugin<Project> {
 
@@ -30,9 +30,9 @@ public class GradleBasePlugin implements Plugin<Project> {
     };
     
     private static final String[] relocations = new String[] {
-            "com.techscode.base#com.techscode.PROJECT_NAME.base",
-            "com.techscode.tpl#com.techscode.PROJECT_NAME.tpl",
-            "com.techscode.dependencies#com.techscode.PROJECT_NAME.dependencies"
+            "com.techscode.base#me.TechsCode.PROJECT_NAME.base",
+            "com.techscode.tpl#me.TechsCode.PROJECT_NAME.tpl",
+            "com.techscode.dependencies#me.TechsCode.PROJECT_NAME.dependencies"
     };
 
     private MetaExtension meta;
@@ -41,8 +41,8 @@ public class GradleBasePlugin implements Plugin<Project> {
     
     @Override
     public void apply(Project project) {
-        Logger.info(
-                Color.BLUE_BOLD_BRIGHT + "Applying GradleBasePlugin to " + project.getName() + "...",
+        me.TechsCode.GradleBasePlugin.Logger.info(
+                me.TechsCode.GradleBasePlugin.Color.BLUE_BOLD_BRIGHT + "Applying GradleBasePlugin to " + project.getName() + "...",
                 "",
                 "Project Information:"
         );

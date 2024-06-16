@@ -1,4 +1,4 @@
-package com.techscode.GradeBasePlugin;
+package me.TechsCode.GradleBasePlugin;
 
 public enum Color {
 
