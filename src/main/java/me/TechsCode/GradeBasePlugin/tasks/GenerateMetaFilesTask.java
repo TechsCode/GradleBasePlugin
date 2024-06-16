@@ -56,11 +56,9 @@ public class GenerateMetaFilesTask extends DefaultTask {
         if (load != null) {
             writer.println("load: " + load);
         }
-        if (libraries != null) {
+        if (libraries != null && !libraries.isEmpty()){
             writer.println("libraries:");
             libraries.stream().map(library -> "- " + library).forEach(writer::println);
-        } else {
-            writer.println("libraries: []");
         }
         writer.close();
     }
@@ -77,11 +75,9 @@ public class GenerateMetaFilesTask extends DefaultTask {
         writer.println("main: me.TechsCode." + getProject().getName() + ".base.loader.BungeeLoader");
         writer.println("author: Tech");
 
-        if (libraries != null) {
+        if (libraries != null && !libraries.isEmpty()) {
             writer.println("libraries:");
             libraries.stream().map(library -> "- " + library).forEach(writer::println);
-        } else {
-            writer.println("libraries: []");
         }
         writer.close();
     }
