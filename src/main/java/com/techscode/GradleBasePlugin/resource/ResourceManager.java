@@ -1,4 +1,4 @@
-package me.TechsCode.GradleBasePlugin.resource;
+package com.techscode.GradleBasePlugin.resource;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,10 +8,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-import me.TechsCode.GradleBasePlugin.Color;
-import me.TechsCode.GradleBasePlugin.Logger;
-import me.TechsCode.GradleBasePlugin.extensions.Downloader;
-import me.TechsCode.GradleBasePlugin.extensions.MetaExtension;
+import com.techscode.GradleBasePlugin.Color;
+import com.techscode.GradleBasePlugin.Logger;
+import com.techscode.GradleBasePlugin.extensions.Downloader;
+import com.techscode.GradleBasePlugin.extensions.MetaExtension;
 import org.gradle.api.Project;
 
 public class ResourceManager {

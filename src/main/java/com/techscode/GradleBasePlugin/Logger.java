@@ -1,4 +1,4 @@
-package me.TechsCode.GradleBasePlugin;
+package com.techscode.GradleBasePlugin;
 
 /**
  * Logging util making it easier to log messages to the console

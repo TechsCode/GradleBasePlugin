@@ -1,4 +1,4 @@
-package me.TechsCode.GradleBasePlugin.extensions;
+package com.techscode.GradleBasePlugin.extensions;
 
 import java.io.File;
 import java.io.IOException;

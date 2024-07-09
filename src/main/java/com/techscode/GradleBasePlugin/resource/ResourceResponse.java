@@ -1,4 +1,4 @@
-package me.TechsCode.GradleBasePlugin.resource;
+package com.techscode.GradleBasePlugin.resource;
 
 public enum ResourceResponse {
 

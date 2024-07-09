@@ -1,13 +1,13 @@
-package me.TechsCode.GradleBasePlugin.tasks;
+package com.techscode.GradleBasePlugin.tasks;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import me.TechsCode.GradleBasePlugin.Color;
-import me.TechsCode.GradleBasePlugin.Logger;
-import me.TechsCode.GradleBasePlugin.extensions.MetaExtension;
+import com.techscode.GradleBasePlugin.Color;
+import com.techscode.GradleBasePlugin.Logger;
+import com.techscode.GradleBasePlugin.extensions.MetaExtension;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 

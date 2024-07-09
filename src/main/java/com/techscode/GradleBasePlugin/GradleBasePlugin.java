@@ -1,18 +1,17 @@
-package me.TechsCode.GradleBasePlugin;
+package com.techscode.GradleBasePlugin;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
-import me.TechsCode.GradleBasePlugin.extensions.MetaExtension;
-import me.TechsCode.GradleBasePlugin.resource.ResourceManager;
-import me.TechsCode.GradleBasePlugin.resource.ResourceResponse;
+import com.techscode.GradleBasePlugin.extensions.MetaExtension;
+import com.techscode.GradleBasePlugin.resource.ResourceManager;
+import com.techscode.GradleBasePlugin.resource.ResourceResponse;
+import com.techscode.GradleBasePlugin.tasks.GenerateMetaFilesTask;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar;
-
-import me.TechsCode.GradleBasePlugin.tasks.GenerateMetaFilesTask;
 
 public class GradleBasePlugin implements Plugin<Project> {
 
@@ -25,8 +24,8 @@ public class GradleBasePlugin implements Plugin<Project> {
     };
     
     private static final String[] dependencies = new String[] {
-            "compileOnly#org.spigotmc:spigot-api:1.20.6-R0.1-SNAPSHOT",
-            "compileOnly#net.md-5:bungeecord-api:1.20-R0.1-SNAPSHOT"
+            "compileOnly#org.spigotmc:spigot-api:1.21-R0.1-SNAPSHOT",
+            "compileOnly#net.md-5:bungeecord-api:1.21-R0.1-SNAPSHOT"
     };
     
     private static final String[] relocations = new String[] {
@@ -41,8 +40,8 @@ public class GradleBasePlugin implements Plugin<Project> {
     
     @Override
     public void apply(Project project) {
-        me.TechsCode.GradleBasePlugin.Logger.info(
-                me.TechsCode.GradleBasePlugin.Color.BLUE_BOLD_BRIGHT + "Applying GradleBasePlugin to " + project.getName() + "...",
+        Logger.info(
+                Color.BLUE_BOLD_BRIGHT + "Applying GradleBasePlugin to " + project.getName() + "...",
                 "",
                 "Project Information:"
         );
