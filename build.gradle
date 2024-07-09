@@ -7,12 +7,11 @@ plugins {
 
 def groupId = 'com.techscode'
 def artifactId = 'GradleBasePlugin'
-
 // Versioning:
 //                      /---> Major Version - Increment this when you make a breaking change
 //                      | /---> Minor Version - Increment this when you add a new feature
 //                      | |  /---> Patch Version - Increment this when you make a bug fix
-def versionNum = '5.0.7'
+def versionNum = '5.0.8'
 
 group = groupId
 version = versionNum
@@ -40,9 +39,9 @@ dependencies {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId
-            artifactId
-            versionNum
+            groupId = groupId
+            artifactId = artifactId
+            version = versionNum
 
             from components.java
         }
