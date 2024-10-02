@@ -12,7 +12,7 @@ def artifactId = 'GradleBasePlugin'
 //                      /---> Major Version - Increment this when you make a breaking change
 //                      | /---> Minor Version - Increment this when you add a new feature
 //                      | |  /---> Patch Version - Increment this when you make a bug fix
-def versionNum = '4.4.0'
+def versionNum = '4.5.0-BETA'
 
 group = groupId
 version = versionNum

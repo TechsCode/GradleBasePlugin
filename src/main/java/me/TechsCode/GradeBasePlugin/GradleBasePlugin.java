@@ -25,7 +25,7 @@ public class GradleBasePlugin implements Plugin<Project> {
     };
     
     private static final String[] dependencies = new String[] {
-            "compileOnly#org.spigotmc:spigot-api:1.21-R0.1-SNAPSHOT",
+            "compileOnly#org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT",
             "compileOnly#net.md-5:bungeecord-api:1.21-R0.1-SNAPSHOT"
     };
     
@@ -81,8 +81,8 @@ public class GradleBasePlugin implements Plugin<Project> {
     private void afterProjectEvaluation(Project project) {
         // Setting properties
         project.setProperty("version", meta.pluginVersion);
-        project.setProperty("sourceCompatibility", "1.8");
-        project.setProperty("targetCompatibility", "1.8");
+        project.setProperty("sourceCompatibility", "17");
+        project.setProperty("targetCompatibility", "17");
 
         if (!meta.configValid()) {
             Logger.error(
