@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'maven-publish'
     id 'groovy'
-    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "com.gradleup.shadow" version "8.3.6"
 }
 
 def groupId = 'me.TechsCode'
@@ -12,7 +12,7 @@ def artifactId = 'GradleBasePlugin'
 //                      /---> Major Version - Increment this when you make a breaking change
 //                      | /---> Minor Version - Increment this when you add a new feature
 //                      | |  /---> Patch Version - Increment this when you make a bug fix
-def versionNum = '4.5.2'
+def versionNum = '4.6.0'
 
 group = groupId
 version = versionNum
@@ -29,12 +29,12 @@ dependencies {
     compileOnly localGroovy()
     compileOnly gradleApi()
 
-    implementation 'commons-io:commons-io:2.13.0'
-    implementation "com.google.code.gson:gson:2.10.1"
+    implementation 'commons-io:commons-io:2.19.0'
+    implementation "com.google.code.gson:gson:2.13.1"
     implementation 'com.jcraft:jsch:0.1.55'
 
-    implementation 'com.github.johnrengelman.shadow:com.github.johnrengelman.shadow.gradle.plugin:7.1.2'
-    implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
+    implementation 'org.apache.httpcomponents.client5:httpclient5:5.4.1'
+    implementation 'com.gradleup.shadow:com.gradleup.shadow.gradle.plugin:8.3.6'
 }
 
 publishing {
