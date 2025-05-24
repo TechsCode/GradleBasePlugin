@@ -66,7 +66,7 @@ public class GradleBasePlugin implements Plugin<Project> {
         }
 
         // Setting up Shadow Plugin
-        project.getPlugins().apply("com.github.johnrengelman.shadow");
+        project.getPlugins().apply("com.gradleup.shadow");
         getShadowJar(project).getArchiveFileName().set(project.getName() + "-" + meta.pluginVersion + ".jar");
         getShadowJar(project).getDestinationDirectory().set(destinationDir);
         getShadowJar(project).dependsOn("generateMetaFiles");
